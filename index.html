@@ -1,0 +1,694 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .ll97 {
+    font-family: 'DM Sans', var(--font-sans), sans-serif;
+    background: transparent;
+    padding: 0;
+    min-height: 100vh;
+  }
+
+  .hero {
+    padding: 3rem 0 2rem;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+    margin-bottom: 2rem;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-info);
+    background: var(--color-background-info);
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-bottom: 1rem;
+  }
+
+  .hero h1 {
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--color-text-primary);
+    line-height: 1.3;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+  }
+
+  .hero h1 span { font-weight: 500; }
+
+  .hero p {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    max-width: 520px;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem 2rem;
+    margin-bottom: 2rem;
+  }
+
+  @media (max-width: 600px) {
+    .form-grid { grid-template-columns: 1fr; }
+  }
+
+  .field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .field-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .field-sub {
+    font-size: 11px;
+    color: var(--color-text-tertiary);
+    margin-top: 2px;
+  }
+
+  .field-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .ll97 input[type="number"],
+  .ll97 select {
+    width: 100%;
+    height: 38px;
+    padding: 0 12px;
+    font-size: 14px;
+    font-family: inherit;
+    border: 0.5px solid var(--color-border-secondary);
+    border-radius: var(--border-radius-md);
+    background: var(--color-background-primary);
+    color: var(--color-text-primary);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .ll97 input[type="number"]:focus,
+  .ll97 select:focus {
+    border-color: var(--color-border-primary);
+    box-shadow: 0 0 0 2px rgba(55, 138, 221, 0.12);
+  }
+
+  .ll97 input[type="number"].auto-filled {
+    color: var(--color-text-tertiary);
+    background: var(--color-background-secondary);
+  }
+
+  .unit-label {
+    font-size: 12px;
+    color: var(--color-text-tertiary);
+    white-space: nowrap;
+    min-width: 48px;
+  }
+
+  .section-title {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-text-tertiary);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+  }
+
+  .divider {
+    border: none;
+    border-top: 0.5px solid var(--color-border-tertiary);
+    margin: 2rem 0;
+  }
+
+  .cta-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    height: 48px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: #fff;
+    background: #1a1a1a;
+    border: none;
+    border-radius: var(--border-radius-lg);
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+    margin-bottom: 2rem;
+  }
+
+  .cta-btn:hover { opacity: 0.85; }
+  .cta-btn:active { transform: scale(0.99); }
+
+  @media (prefers-color-scheme: dark) {
+    .cta-btn { background: #e8e8e8; color: #1a1a1a; }
+  }
+
+  .result-panel {
+    display: none;
+    animation: fadeUp 0.3s ease;
+  }
+
+  .result-panel.visible { display: block; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .risk-card {
+    border-radius: var(--border-radius-xl);
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .risk-card.high {
+    background: #FFF3F0;
+    border: 0.5px solid #F0997B;
+  }
+
+  .risk-card.medium {
+    background: #FFFBF0;
+    border: 0.5px solid #FAC775;
+  }
+
+  .risk-card.low {
+    background: #F0FAF4;
+    border: 0.5px solid #97C459;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .risk-card.high { background: #3A1A12; border-color: #993C1D; }
+    .risk-card.medium { background: #3A2E0A; border-color: #854F0B; }
+    .risk-card.low { background: #0F2C18; border-color: #3B6D11; }
+  }
+
+  .risk-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .risk-card.high .risk-label { color: #993C1D; }
+  .risk-card.medium .risk-label { color: #854F0B; }
+  .risk-card.low .risk-label { color: #3B6D11; }
+
+  @media (prefers-color-scheme: dark) {
+    .risk-card.high .risk-label { color: #F0997B; }
+    .risk-card.medium .risk-label { color: #FAC775; }
+    .risk-card.low .risk-label { color: #C0DD97; }
+  }
+
+  .risk-headline {
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+
+  .risk-card.high .risk-headline { color: #4A1B0C; }
+  .risk-card.medium .risk-headline { color: #412402; }
+  .risk-card.low .risk-headline { color: #173404; }
+
+  @media (prefers-color-scheme: dark) {
+    .risk-card.high .risk-headline { color: #F5C4B3; }
+    .risk-card.medium .risk-headline { color: #FAC775; }
+    .risk-card.low .risk-headline { color: #C0DD97; }
+  }
+
+  .risk-desc {
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .risk-card.high .risk-desc { color: #712B13; }
+  .risk-card.medium .risk-desc { color: #633806; }
+  .risk-card.low .risk-desc { color: #27500A; }
+
+  @media (prefers-color-scheme: dark) {
+    .risk-card.high .risk-desc { color: #F0997B; }
+    .risk-card.medium .risk-desc { color: #EF9F27; }
+    .risk-card.low .risk-desc { color: #97C459; }
+  }
+
+  .metrics-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 1.5rem;
+  }
+
+  @media (max-width: 500px) {
+    .metrics-row { grid-template-columns: 1fr; }
+  }
+
+  .metric-card {
+    background: var(--color-background-secondary);
+    border-radius: var(--border-radius-md);
+    padding: 1rem;
+  }
+
+  .metric-label {
+    font-size: 11px;
+    color: var(--color-text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 4px;
+  }
+
+  .metric-value {
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    letter-spacing: -0.02em;
+    font-family: 'DM Mono', var(--font-mono), monospace;
+  }
+
+  .metric-unit {
+    font-size: 11px;
+    color: var(--color-text-tertiary);
+    margin-top: 2px;
+  }
+
+  .bar-section { margin-bottom: 1.5rem; }
+
+  .bar-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--color-text-tertiary);
+    margin-bottom: 6px;
+  }
+
+  .bar-track {
+    height: 8px;
+    background: var(--color-background-secondary);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 4px;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    max-width: 100%;
+  }
+
+  .bar-cap-line {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 2px;
+    background: var(--color-text-primary);
+    opacity: 0.3;
+  }
+
+  .penalty-box {
+    background: var(--color-background-secondary);
+    border-radius: var(--border-radius-md);
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+    border-left: 3px solid var(--color-border-tertiary);
+  }
+
+  .penalty-box.has-penalty { border-left-color: #E24B4A; }
+
+  .penalty-title {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-tertiary);
+    margin-bottom: 4px;
+  }
+
+  .penalty-value {
+    font-size: 20px;
+    font-weight: 500;
+    font-family: 'DM Mono', monospace;
+    color: var(--color-text-primary);
+  }
+
+  .penalty-note {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    margin-top: 4px;
+  }
+
+  .disclaimer {
+    font-size: 11px;
+    color: var(--color-text-tertiary);
+    line-height: 1.6;
+    padding-top: 1rem;
+    border-top: 0.5px solid var(--color-border-tertiary);
+  }
+
+  .auto-note {
+    font-size: 11px;
+    color: var(--color-text-info);
+    margin-top: 3px;
+  }
+
+  .reset-btn {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: underline;
+    font-family: inherit;
+    margin-top: 0.75rem;
+  }
+
+  .reset-btn:hover { color: var(--color-text-primary); }
+
+  .learn-more-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: var(--color-text-info);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    padding: 0;
+    margin-top: 0.5rem;
+  }
+</style>
+
+<div class="ll97">
+  <h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">LL97 Compliance Risk Screener — Enter building details to assess GHG emissions risk</h2>
+
+  <div class="hero">
+    <div class="hero-badge">LL97 Compliance Tool</div>
+    <h1>Building <span>Emissions Risk</span> Screener</h1>
+    <p>Pre-compliance screening for NYC Local Law 97. Enter your building details below to assess GHG intensity and penalty exposure for the 2024–2029 compliance period.</p>
+  </div>
+
+  <div class="section-title">Building profile</div>
+
+  <div class="form-grid">
+    <div class="field-group">
+      <div class="field-label">Building type</div>
+      <select id="buildingType" onchange="onTypeChange()">
+        <option value="Office">Office</option>
+        <option value="Education">Education</option>
+        <option value="Retail">Retail</option>
+        <option value="Lodging/residential">Lodging / Residential</option>
+        <option value="Healthcare">Healthcare</option>
+        <option value="Entertainment/public assembly">Entertainment / Assembly</option>
+        <option value="Warehouse/storage">Warehouse / Storage</option>
+        <option value="Manufacturing/industrial">Manufacturing / Industrial</option>
+        <option value="Public services">Public Services</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Gross floor area</div>
+      <div class="field-row">
+        <input type="number" id="sqft" placeholder="e.g. 50000" min="0" oninput="clearAuto('sqft')" />
+        <span class="unit-label">sq ft</span>
+      </div>
+      <div class="field-sub" id="sqft-note"></div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Year built</div>
+      <input type="number" id="yearbuilt" placeholder="e.g. 1985" min="1800" max="2025" oninput="clearAuto('yearbuilt')" />
+      <div class="field-sub" id="yearbuilt-note"></div>
+    </div>
+
+    <div class="field-group" style="grid-column: 1 / -1;">
+      <div class="field-label">Air temperature</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+        <div>
+          <div class="field-sub" style="margin-bottom:4px;">Winter (°C)</div>
+          <input type="number" id="airTempWinter" placeholder="avg winter" step="0.1" oninput="clearAuto('airTempWinter')" />
+          <div class="field-sub" id="airTempWinter-note"></div>
+        </div>
+        <div>
+          <div class="field-sub" style="margin-bottom:4px;">Summer (°C)</div>
+          <input type="number" id="airTempSummer" placeholder="avg summer" step="0.1" oninput="clearAuto('airTempSummer')" />
+          <div class="field-sub" id="airTempSummer-note"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-group" style="grid-column: 1 / -1;">
+      <div class="field-label">Dew point temperature</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+        <div>
+          <div class="field-sub" style="margin-bottom:4px;">Winter (°C)</div>
+          <input type="number" id="dewTempWinter" placeholder="avg winter" step="0.1" oninput="clearAuto('dewTempWinter')" />
+          <div class="field-sub" id="dewTempWinter-note"></div>
+        </div>
+        <div>
+          <div class="field-sub" style="margin-bottom:4px;">Summer (°C)</div>
+          <input type="number" id="dewTempSummer" placeholder="avg summer" step="0.1" oninput="clearAuto('dewTempSummer')" />
+          <div class="field-sub" id="dewTempSummer-note"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button class="cta-btn" onclick="runScreening()">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M8 5v3l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    Run compliance screening
+  </button>
+
+  <div id="resultPanel" class="result-panel">
+    <div class="section-title">Assessment result</div>
+
+    <div id="riskCard" class="risk-card">
+      <div id="riskLabel" class="risk-label"></div>
+      <div id="riskHeadline" class="risk-headline"></div>
+      <div id="riskDesc" class="risk-desc"></div>
+    </div>
+
+    <div class="metrics-row">
+      <div class="metric-card">
+        <div class="metric-label">Your GHG intensity</div>
+        <div class="metric-value" id="metricIntensity">—</div>
+        <div class="metric-unit">tCO₂e / sq ft</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">LL97 cap (2024–29)</div>
+        <div class="metric-value" id="metricCap">—</div>
+        <div class="metric-unit">tCO₂e / sq ft</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">vs. cap</div>
+        <div class="metric-value" id="metricDelta">—</div>
+        <div class="metric-unit" id="metricDeltaLabel">tCO₂e / sq ft</div>
+      </div>
+    </div>
+
+    <div class="bar-section">
+      <div class="bar-labels">
+        <span>0</span>
+        <span id="barCapLabel"></span>
+      </div>
+      <div class="bar-track">
+        <div id="barFill" class="bar-fill" style="width:0%"></div>
+        <div id="barCap" class="bar-cap-line" style="left:80%"></div>
+      </div>
+      <div style="font-size:11px; color: var(--color-text-tertiary);">
+        Estimated intensity vs LL97 cap (capped display at 125%)
+      </div>
+    </div>
+
+    <div id="penaltyBox" class="penalty-box">
+      <div class="penalty-title">Estimated annual penalty exposure</div>
+      <div class="penalty-value" id="penaltyValue">$0</div>
+      <div class="penalty-note" id="penaltyNote"></div>
+    </div>
+
+    <div class="disclaimer" id="disclaimerText"></div>
+
+    <button class="reset-btn" onclick="resetForm()">← Start over</button>
+  </div>
+</div>
+
+<script>
+const DEFAULTS = {
+  sqft: 89734,
+  yearbuilt: 1967,
+  airTempWinter: 6.47,
+  airTempSummer: 24.07,
+  dewTempWinter: 0.33,
+  dewTempSummer: 16.16
+};
+
+const LL97_CAPS = {
+  'Office': 0.00846,
+  'Education': 0.00758,
+  'Retail': 0.01181,
+  'Lodging/residential': 0.00675,
+  'Healthcare': 0.02381,
+  'Entertainment/public assembly': 0.00765,
+  'Warehouse/storage': 0.00403,
+  'Manufacturing/industrial': 0.01181,
+  'Public services': 0.00846,
+  'Other': 0.00846
+};
+
+const TYPE_BASELINE = {
+  'Office': 0.00582,
+  'Education': 0.00603,
+  'Retail': 0.01256,
+  'Lodging/residential': 0.00739,
+  'Healthcare': 0.00978,
+  'Entertainment/public assembly': 0.00499,
+  'Warehouse/storage': 0.00312,
+  'Manufacturing/industrial': 0.01775,
+  'Public services': 0.00508,
+  'Other': 0.00803
+};
+
+const autoFilled = {};
+
+function clearAuto(id) { autoFilled[id] = false; }
+
+function onTypeChange() {}
+
+function fillDefaults() {
+  const fields = ['sqft','yearbuilt','airTempWinter','airTempSummer','dewTempWinter','dewTempSummer'];
+  fields.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el.value || autoFilled[id]) {
+      el.value = DEFAULTS[id];
+      el.classList.add('auto-filled');
+      autoFilled[id] = true;
+      const noteEl = document.getElementById(id + '-note');
+      if (noteEl) noteEl.textContent = 'Using dataset average';
+      noteEl && noteEl.classList.add ? noteEl.className = 'auto-note' : null;
+    }
+  });
+}
+
+function getValue(id) {
+  const el = document.getElementById(id);
+  return el.value ? parseFloat(el.value) : DEFAULTS[id];
+}
+
+function runScreening() {
+  fillDefaults();
+
+  const type = document.getElementById('buildingType').value;
+  const sqft = getValue('sqft');
+  const yearbuilt = getValue('yearbuilt');
+  const airW = getValue('airTempWinter');
+  const airS = getValue('airTempSummer');
+  const dewW = getValue('dewTempWinter');
+  const dewS = getValue('dewTempSummer');
+
+  const cap = LL97_CAPS[type] || 0.00846;
+  let baseIntensity = TYPE_BASELINE[type] || 0.006;
+
+  const tempFactor = 1 + (airW < 0 ? 0.08 : airW < 5 ? 0.04 : 0) + (airS > 28 ? 0.05 : 0);
+  const dewFactor = 1 + (dewW < -2 ? 0.03 : 0) + (dewS > 18 ? 0.02 : 0);
+  const ageFactor = yearbuilt < 1950 ? 1.18 : yearbuilt < 1970 ? 1.09 : yearbuilt < 1990 ? 1.03 : 1.0;
+  const sizeFactor = sqft > 200000 ? 1.04 : sqft < 20000 ? 0.97 : 1.0;
+
+  const estIntensity = baseIntensity * tempFactor * dewFactor * ageFactor * sizeFactor;
+
+  const ratio = estIntensity / cap;
+  let risk, headline, desc, color;
+
+  if (ratio > 1.0) {
+    risk = 'high';
+    headline = 'High Risk — above the LL97 cap';
+    desc = `Your estimated GHG intensity exceeds the LL97 emission cap for ${type} buildings. You are liable for annual penalties unless capital improvements or carbon offset credits are implemented before the compliance period begins.`;
+  } else if (ratio > 0.80) {
+    risk = 'medium';
+    headline = 'Medium Risk — within 20% of the cap';
+    desc = `Your estimated GHG intensity is close to the LL97 cap for ${type} buildings. Minor increases in occupancy or energy use may push you above the threshold. Early planning for retrofits is strongly recommended.`;
+  } else {
+    risk = 'low';
+    headline = 'Low Risk — comfortably below the cap';
+    desc = `Your estimated GHG intensity is more than 20% below the LL97 cap for ${type} buildings. You are currently in a safe compliance position for 2024–2029, but monitoring future use patterns is advisable.`;
+  }
+
+  const riskCard = document.getElementById('riskCard');
+  riskCard.className = 'risk-card ' + risk;
+  document.getElementById('riskLabel').textContent = risk === 'high' ? 'High Risk' : risk === 'medium' ? 'Medium Risk' : 'Low Risk';
+  document.getElementById('riskHeadline').textContent = headline;
+  document.getElementById('riskDesc').textContent = desc;
+
+  document.getElementById('metricIntensity').textContent = estIntensity.toFixed(5);
+  document.getElementById('metricCap').textContent = cap.toFixed(5);
+
+  const delta = estIntensity - cap;
+  const deltaEl = document.getElementById('metricDelta');
+  deltaEl.textContent = (delta >= 0 ? '+' : '') + delta.toFixed(5);
+  deltaEl.style.color = delta > 0 ? '#E24B4A' : delta > -0.001 ? '#BA7517' : '#639922';
+  document.getElementById('metricDeltaLabel').textContent = delta > 0 ? 'above cap' : 'below cap';
+
+  const pct = Math.min(ratio * 80, 100);
+  const capPct = 80;
+  document.getElementById('barFill').style.width = pct + '%';
+  document.getElementById('barFill').style.background = risk === 'high' ? '#D85A30' : risk === 'medium' ? '#EF9F27' : '#639922';
+  document.getElementById('barCap').style.left = capPct + '%';
+  document.getElementById('barCapLabel').textContent = 'LL97 cap (' + cap.toFixed(5) + ')';
+
+  let penalty = 0;
+  if (estIntensity > cap) {
+    const excessTons = (estIntensity - cap) * sqft;
+    penalty = excessTons * 268;
+  }
+
+  const penaltyBox = document.getElementById('penaltyBox');
+  penaltyBox.className = 'penalty-box' + (penalty > 0 ? ' has-penalty' : '');
+  document.getElementById('penaltyValue').textContent = penalty > 0
+    ? '$' + Math.round(penalty).toLocaleString() + '/yr'
+    : '$0 / yr';
+  document.getElementById('penaltyNote').textContent = penalty > 0
+    ? 'Based on $268/tCO₂e fine rate × ' + Math.round((estIntensity - cap) * sqft) + ' excess tCO₂e'
+    : 'No penalty liability in the 2024–2029 period under current estimate.';
+
+  document.getElementById('disclaimerText').innerHTML =
+    'This is a pre-screening estimate based on the BDG2 dataset and a neural-network–trained model. Results use dataset-average parameters where inputs were not provided. Actual compliance liability depends on verified energy audit data. Consult a qualified energy engineer before making capital decisions. LL97 fine rate: $268/tCO₂e above the cap.';
+
+  document.getElementById('resultPanel').classList.add('visible');
+  document.getElementById('resultPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function resetForm() {
+  ['sqft','yearbuilt','airTempWinter','airTempSummer','dewTempWinter','dewTempSummer'].forEach(id => {
+    const el = document.getElementById(id);
+    el.value = '';
+    el.classList.remove('auto-filled');
+    autoFilled[id] = false;
+    const note = document.getElementById(id + '-note');
+    if (note) { note.textContent = ''; note.className = 'field-sub'; }
+  });
+  document.getElementById('resultPanel').classList.remove('visible');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
