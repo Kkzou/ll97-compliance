@@ -1,694 +1,1581 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LL97 Compliance Screener — Will Your Building Survive?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap');
+/* ===========================================================
+   DESIGN TOKENS
+   =========================================================== */
+:root {
+  --bg: #FAFAF7;
+  --surface: #FFFFFF;
+  --surface-2: #F4F3EE;
+  --ink: #0A0A0A;
+  --ink-2: #3A3A37;
+  --ink-3: #6B6B66;
+  --border: rgba(10,10,10,0.08);
+  --border-strong: rgba(10,10,10,0.14);
+  --accent: #1A1A1A;
+  --green: #2F7D3E;
+  --green-bg: #EAF5ED;
+  --green-border: #B8DAC0;
+  --amber: #B5641C;
+  --amber-bg: #FCEFDC;
+  --amber-border: #F0C988;
+  --red: #B0342E;
+  --red-bg: #FBE8E5;
+  --red-border: #F0A89F;
+  --blue: #1E5FA5;
+  --blue-bg: #E8EFF7;
+  --radius-sm: 8px;
+  --radius: 14px;
+  --radius-lg: 20px;
+  --shadow-sm: 0 1px 2px rgba(10,10,10,0.04);
+  --shadow: 0 4px 16px rgba(10,10,10,0.06);
+}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+/* ===========================================================
+   RESET & BASE
+   =========================================================== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.55;
+  font-size: 17px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'ss01', 'cv11';
+}
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+input, select { font-family: inherit; color: inherit; }
+a { color: inherit; text-decoration: none; }
+.mono { font-family: 'JetBrains Mono', 'SF Mono', Consolas, monospace; font-feature-settings: 'tnum'; }
 
-  .ll97 {
-    font-family: 'DM Sans', var(--font-sans), sans-serif;
-    background: transparent;
-    padding: 0;
-    min-height: 100vh;
-  }
+/* ===========================================================
+   LAYOUT
+   =========================================================== */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
 
-  .hero {
-    padding: 3rem 0 2rem;
-    border-bottom: 0.5px solid var(--color-border-tertiary);
-    margin-bottom: 2rem;
-  }
+/* ===========================================================
+   NAV
+   =========================================================== */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(250,250,247,0.85);
+  backdrop-filter: saturate(180%) blur(14px);
+  -webkit-backdrop-filter: saturate(180%) blur(14px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 17px;
+  letter-spacing: -0.01em;
+}
+.brand-mark {
+  width: 28px; height: 28px;
+  border-radius: 7px;
+  background: var(--ink);
+  display: grid; place-items: center;
+  color: white;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: -0.02em;
+}
+.nav-links {
+  display: flex; gap: 32px;
+  font-size: 15px;
+  color: var(--ink-2);
+}
+.nav-links a:hover { color: var(--ink); }
+.nav-cta {
+  background: var(--ink);
+  color: white;
+  padding: 9px 18px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: transform 0.15s, opacity 0.15s;
+}
+.nav-cta:hover { transform: translateY(-1px); opacity: 0.9; }
+@media (max-width: 720px) {
+  .nav-links { display: none; }
+}
 
-  .hero-badge {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--color-text-info);
-    background: var(--color-background-info);
-    padding: 4px 10px;
-    border-radius: 20px;
-    margin-bottom: 1rem;
-  }
+/* ===========================================================
+   HERO
+   =========================================================== */
+.hero {
+  padding: 88px 0 72px;
+  text-align: center;
+  position: relative;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-2);
+  margin-bottom: 28px;
+}
+.hero-badge-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--green); display: inline-block;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; } 50% { opacity: 0.4; }
+}
+.hero h1 {
+  font-size: clamp(42px, 6vw, 72px);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+  margin-bottom: 24px;
+  color: var(--ink);
+}
+.hero h1 .accent {
+  font-style: italic;
+  font-weight: 300;
+  letter-spacing: -0.03em;
+}
+.hero p.sub {
+  font-size: clamp(17px, 2vw, 20px);
+  color: var(--ink-3);
+  max-width: 580px;
+  margin: 0 auto 40px;
+  line-height: 1.55;
+}
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--ink);
+  color: white;
+  padding: 16px 28px;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 500;
+  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 4px 20px rgba(10,10,10,0.15);
+}
+.hero-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(10,10,10,0.2); }
 
-  .hero h1 {
-    font-size: 28px;
-    font-weight: 300;
-    color: var(--color-text-primary);
-    line-height: 1.3;
-    margin-bottom: 0.5rem;
-    letter-spacing: -0.02em;
-  }
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0;
+  max-width: 480px;
+  margin: 64px auto 0;
+  border-top: 1px solid var(--border);
+  padding-top: 40px;
+}
+.hero-stat {
+  text-align: center;
+  padding: 0 16px;
+  border-right: 1px solid var(--border);
+}
+.hero-stat:last-child { border-right: none; }
+.hero-stat-val {
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.hero-stat-label {
+  font-size: 13px;
+  color: var(--ink-3);
+  letter-spacing: 0.02em;
+}
 
-  .hero h1 span { font-weight: 500; }
+/* ===========================================================
+   SECTION
+   =========================================================== */
+section { padding: 64px 0; }
+.section-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-3);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.section-title {
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  margin-bottom: 12px;
+}
+.section-desc {
+  font-size: 18px;
+  color: var(--ink-3);
+  max-width: 580px;
+  line-height: 1.55;
+}
 
-  .hero p {
-    font-size: 14px;
-    color: var(--color-text-secondary);
-    line-height: 1.6;
-    max-width: 520px;
-  }
+/* ===========================================================
+   FORM
+   =========================================================== */
+.form-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  box-shadow: var(--shadow);
+}
+@media (max-width: 720px) {
+  .form-wrap { padding: 24px; border-radius: var(--radius); }
+}
 
-  .form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem 2rem;
-    margin-bottom: 2rem;
-  }
+.form-group {
+  margin-bottom: 40px;
+}
+.form-group:last-child { margin-bottom: 0; }
+.form-group-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+.form-group-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: var(--surface-2);
+  display: grid; place-items: center;
+  flex-shrink: 0;
+}
+.form-group-title {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-bottom: 2px;
+}
+.form-group-sub {
+  font-size: 14px;
+  color: var(--ink-3);
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+@media (max-width: 640px) {
+  .form-grid { grid-template-columns: 1fr; }
+}
 
-  @media (max-width: 600px) {
-    .form-grid { grid-template-columns: 1fr; }
-  }
+.field { display: flex; flex-direction: column; gap: 8px; }
+.field-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.field-opt {
+  font-size: 12px;
+  color: var(--ink-3);
+  font-weight: 400;
+  background: var(--surface-2);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+.field-input, .field-select {
+  width: 100%;
+  height: 48px;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 0 14px;
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--ink);
+  transition: border-color 0.15s, box-shadow 0.15s;
+  outline: none;
+}
+.field-input:focus, .field-select:focus {
+  border-color: var(--ink);
+  box-shadow: 0 0 0 3px rgba(10,10,10,0.08);
+}
+.field-input.auto-filled {
+  background: #FAFAF7;
+  color: var(--ink-3);
+  font-style: italic;
+}
+.field-input::placeholder { color: var(--ink-3); opacity: 0.6; }
+.field-hint {
+  font-size: 12px;
+  color: var(--ink-3);
+  min-height: 14px;
+}
+.field-hint.active { color: var(--blue); }
 
-  .field-group {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
-  .field-label {
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--color-text-secondary);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-  }
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: var(--surface-2);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background 0.15s;
+  user-select: none;
+}
+.toggle:hover { background: #ECEBE5; }
+.toggle-switch {
+  width: 40px; height: 24px;
+  background: #CFCFC8;
+  border-radius: 999px;
+  position: relative;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+.toggle-switch::after {
+  content: ''; position: absolute;
+  top: 3px; left: 3px;
+  width: 18px; height: 18px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.toggle.active .toggle-switch { background: var(--ink); }
+.toggle.active .toggle-switch::after { transform: translateX(16px); }
+.toggle-content { flex: 1; }
+.toggle-title { font-size: 15px; font-weight: 500; margin-bottom: 2px; }
+.toggle-desc { font-size: 13px; color: var(--ink-3); }
 
-  .field-sub {
-    font-size: 11px;
-    color: var(--color-text-tertiary);
-    margin-top: 2px;
-  }
+.advanced-panel {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.3s ease, margin-top 0.3s ease;
+  margin-top: 0;
+}
+.advanced-panel.open {
+  max-height: 1000px;
+  margin-top: 20px;
+}
 
-  .field-row {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-  }
+.submit-btn {
+  width: 100%;
+  height: 64px;
+  background: var(--ink);
+  color: white;
+  border-radius: var(--radius-sm);
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: transform 0.15s, opacity 0.15s;
+  margin-top: 8px;
+}
+.submit-btn:hover { transform: translateY(-1px); opacity: 0.92; }
+.submit-btn:active { transform: translateY(0); }
+.submit-btn:disabled { opacity: 0.5; cursor: wait; transform: none; }
+.submit-loader {
+  width: 18px; height: 18px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: none;
+}
+.submit-btn.loading .submit-loader { display: block; }
+.submit-btn.loading .submit-text { display: none; }
+@keyframes spin { to { transform: rotate(360deg); } }
 
-  .ll97 input[type="number"],
-  .ll97 select {
-    width: 100%;
-    height: 38px;
-    padding: 0 12px;
-    font-size: 14px;
-    font-family: inherit;
-    border: 0.5px solid var(--color-border-secondary);
-    border-radius: var(--border-radius-md);
-    background: var(--color-background-primary);
-    color: var(--color-text-primary);
-    outline: none;
-    transition: border-color 0.15s;
-  }
+/* ===========================================================
+   RESULTS
+   =========================================================== */
+#results { display: none; animation: fadeUp 0.5s ease; }
+#results.visible { display: block; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
-  .ll97 input[type="number"]:focus,
-  .ll97 select:focus {
-    border-color: var(--color-border-primary);
-    box-shadow: 0 0 0 2px rgba(55, 138, 221, 0.12);
-  }
+.result-hero {
+  padding: 56px 48px;
+  border-radius: var(--radius-lg);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 32px;
+}
+@media (max-width: 640px) {
+  .result-hero { padding: 40px 24px; }
+}
+.result-hero.low    { background: var(--green-bg); border: 1px solid var(--green-border); }
+.result-hero.medium { background: var(--amber-bg); border: 1px solid var(--amber-border); }
+.result-hero.high   { background: var(--red-bg);   border: 1px solid var(--red-border); }
 
-  .ll97 input[type="number"].auto-filled {
-    color: var(--color-text-tertiary);
-    background: var(--color-background-secondary);
-  }
+.result-face {
+  font-size: 72px;
+  margin-bottom: 16px;
+  line-height: 1;
+  display: inline-block;
+  animation: bounce 0.6s ease;
+}
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+.result-label {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.result-hero.low    .result-label { color: var(--green); }
+.result-hero.medium .result-label { color: var(--amber); }
+.result-hero.high   .result-label { color: var(--red); }
 
-  .unit-label {
-    font-size: 12px;
-    color: var(--color-text-tertiary);
-    white-space: nowrap;
-    min-width: 48px;
-  }
+.result-title {
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  margin-bottom: 16px;
+}
+.result-hero.low    .result-title { color: #184A23; }
+.result-hero.medium .result-title { color: #5A3008; }
+.result-hero.high   .result-title { color: #5C1915; }
 
-  .section-title {
-    font-size: 11px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--color-text-tertiary);
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 0.5px solid var(--color-border-tertiary);
-  }
+.result-desc {
+  font-size: 18px;
+  max-width: 520px;
+  margin: 0 auto 28px;
+  line-height: 1.55;
+}
+.result-hero.low    .result-desc { color: #2F5D38; }
+.result-hero.medium .result-desc { color: #7A4813; }
+.result-hero.high   .result-desc { color: #7B2923; }
 
-  .divider {
-    border: none;
-    border-top: 0.5px solid var(--color-border-tertiary);
-    margin: 2rem 0;
-  }
+.confidence-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255,255,255,0.6);
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-2);
+}
+.confidence-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--ink);
+}
 
-  .cta-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    width: 100%;
-    height: 48px;
-    font-family: inherit;
-    font-size: 15px;
-    font-weight: 500;
-    letter-spacing: -0.01em;
-    color: #fff;
-    background: #1a1a1a;
-    border: none;
-    border-radius: var(--border-radius-lg);
-    cursor: pointer;
-    transition: opacity 0.15s, transform 0.1s;
-    margin-bottom: 2rem;
-  }
+/* Metric cards */
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+@media (max-width: 900px) { .metrics { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .metrics { grid-template-columns: 1fr; } }
 
-  .cta-btn:hover { opacity: 0.85; }
-  .cta-btn:active { transform: scale(0.99); }
+.metric {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 20px;
+  transition: border-color 0.15s;
+}
+.metric:hover { border-color: var(--border-strong); }
+.metric-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+}
+.metric-val {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+.metric-sub {
+  font-size: 13px;
+  color: var(--ink-3);
+}
+.metric-val.red    { color: var(--red); }
+.metric-val.amber  { color: var(--amber); }
+.metric-val.green  { color: var(--green); }
 
-  @media (prefers-color-scheme: dark) {
-    .cta-btn { background: #e8e8e8; color: #1a1a1a; }
-  }
+/* Panel cards */
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  margin-bottom: 24px;
+}
+@media (max-width: 640px) { .panel { padding: 24px; border-radius: var(--radius); } }
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+.panel-title {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.panel-sub {
+  font-size: 14px;
+  color: var(--ink-3);
+  margin-top: 4px;
+}
 
-  .result-panel {
-    display: none;
-    animation: fadeUp 0.3s ease;
-  }
+/* Penalty timeline */
+.timeline-period {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 24px;
+}
+@media (max-width: 640px) { .timeline-period { grid-template-columns: 1fr; } }
+.period-card {
+  background: var(--surface-2);
+  border-radius: var(--radius-sm);
+  padding: 20px;
+  border-left: 3px solid var(--border-strong);
+}
+.period-card.active { border-left-color: var(--red); background: #FFF5F4; }
+.period-year {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-3);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.period-cap {
+  font-size: 14px;
+  color: var(--ink-2);
+  margin-bottom: 12px;
+}
+.period-penalty {
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.period-penalty.red { color: var(--red); }
+.period-penalty.green { color: var(--green); }
 
-  .result-panel.visible { display: block; }
+/* Drivers */
+.drivers {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.driver {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.driver-label {
+  font-size: 15px;
+  font-weight: 500;
+  min-width: 170px;
+}
+.driver-bar-wrap {
+  flex: 1;
+  height: 10px;
+  background: var(--surface-2);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.driver-bar {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.8s cubic-bezier(0.22,1,0.36,1);
+}
+.driver-pct {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-3);
+  min-width: 40px;
+  text-align: right;
+}
 
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(10px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+/* Recommendations */
+.recs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+.rec-card {
+  background: var(--surface-2);
+  border-radius: var(--radius);
+  padding: 20px;
+  border: 1px solid transparent;
+  transition: all 0.15s;
+}
+.rec-card:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+.rec-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  background: var(--surface);
+  display: grid; place-items: center;
+  margin-bottom: 14px;
+}
+.rec-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.rec-desc {
+  font-size: 14px;
+  color: var(--ink-3);
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+.rec-impact {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--green);
+}
 
-  .risk-card {
-    border-radius: var(--border-radius-xl);
-    padding: 2rem;
-    margin-bottom: 1.5rem;
-    position: relative;
-    overflow: hidden;
-  }
+.reset-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink-3);
+  font-size: 14px;
+  margin-top: 24px;
+  padding: 10px 0;
+}
+.reset-btn:hover { color: var(--ink); }
 
-  .risk-card.high {
-    background: #FFF3F0;
-    border: 0.5px solid #F0997B;
-  }
+/* Footer */
+.footer {
+  padding: 48px 0 64px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  color: var(--ink-3);
+  font-size: 14px;
+  line-height: 1.7;
+}
+.footer a { color: var(--ink-2); border-bottom: 1px solid var(--border-strong); }
 
-  .risk-card.medium {
-    background: #FFFBF0;
-    border: 0.5px solid #FAC775;
-  }
+/* How it works */
+.how-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+}
+@media (max-width: 800px) { .how-grid { grid-template-columns: 1fr; } }
+.how-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+}
+.how-num {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-3);
+  letter-spacing: 0.1em;
+  margin-bottom: 16px;
+}
+.how-title {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-bottom: 10px;
+}
+.how-desc {
+  font-size: 15px;
+  color: var(--ink-3);
+  line-height: 1.55;
+}
 
-  .risk-card.low {
-    background: #F0FAF4;
-    border: 0.5px solid #97C459;
-  }
+/* Chart container */
+.chart-wrap {
+  position: relative;
+  height: 280px;
+  width: 100%;
+  margin-top: 16px;
+}
 
-  @media (prefers-color-scheme: dark) {
-    .risk-card.high { background: #3A1A12; border-color: #993C1D; }
-    .risk-card.medium { background: #3A2E0A; border-color: #854F0B; }
-    .risk-card.low { background: #0F2C18; border-color: #3B6D11; }
-  }
-
-  .risk-label {
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    margin-bottom: 0.5rem;
-  }
-
-  .risk-card.high .risk-label { color: #993C1D; }
-  .risk-card.medium .risk-label { color: #854F0B; }
-  .risk-card.low .risk-label { color: #3B6D11; }
-
-  @media (prefers-color-scheme: dark) {
-    .risk-card.high .risk-label { color: #F0997B; }
-    .risk-card.medium .risk-label { color: #FAC775; }
-    .risk-card.low .risk-label { color: #C0DD97; }
-  }
-
-  .risk-headline {
-    font-size: 22px;
-    font-weight: 500;
-    letter-spacing: -0.02em;
-    margin-bottom: 0.5rem;
-  }
-
-  .risk-card.high .risk-headline { color: #4A1B0C; }
-  .risk-card.medium .risk-headline { color: #412402; }
-  .risk-card.low .risk-headline { color: #173404; }
-
-  @media (prefers-color-scheme: dark) {
-    .risk-card.high .risk-headline { color: #F5C4B3; }
-    .risk-card.medium .risk-headline { color: #FAC775; }
-    .risk-card.low .risk-headline { color: #C0DD97; }
-  }
-
-  .risk-desc {
-    font-size: 13px;
-    line-height: 1.6;
-  }
-
-  .risk-card.high .risk-desc { color: #712B13; }
-  .risk-card.medium .risk-desc { color: #633806; }
-  .risk-card.low .risk-desc { color: #27500A; }
-
-  @media (prefers-color-scheme: dark) {
-    .risk-card.high .risk-desc { color: #F0997B; }
-    .risk-card.medium .risk-desc { color: #EF9F27; }
-    .risk-card.low .risk-desc { color: #97C459; }
-  }
-
-  .metrics-row {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 12px;
-    margin-bottom: 1.5rem;
-  }
-
-  @media (max-width: 500px) {
-    .metrics-row { grid-template-columns: 1fr; }
-  }
-
-  .metric-card {
-    background: var(--color-background-secondary);
-    border-radius: var(--border-radius-md);
-    padding: 1rem;
-  }
-
-  .metric-label {
-    font-size: 11px;
-    color: var(--color-text-tertiary);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    margin-bottom: 4px;
-  }
-
-  .metric-value {
-    font-size: 20px;
-    font-weight: 500;
-    color: var(--color-text-primary);
-    letter-spacing: -0.02em;
-    font-family: 'DM Mono', var(--font-mono), monospace;
-  }
-
-  .metric-unit {
-    font-size: 11px;
-    color: var(--color-text-tertiary);
-    margin-top: 2px;
-  }
-
-  .bar-section { margin-bottom: 1.5rem; }
-
-  .bar-labels {
-    display: flex;
-    justify-content: space-between;
-    font-size: 11px;
-    color: var(--color-text-tertiary);
-    margin-bottom: 6px;
-  }
-
-  .bar-track {
-    height: 8px;
-    background: var(--color-background-secondary);
-    border-radius: 4px;
-    overflow: hidden;
-    position: relative;
-    margin-bottom: 4px;
-  }
-
-  .bar-fill {
-    height: 100%;
-    border-radius: 4px;
-    transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-    max-width: 100%;
-  }
-
-  .bar-cap-line {
-    position: absolute;
-    top: 0;
-    height: 100%;
-    width: 2px;
-    background: var(--color-text-primary);
-    opacity: 0.3;
-  }
-
-  .penalty-box {
-    background: var(--color-background-secondary);
-    border-radius: var(--border-radius-md);
-    padding: 1rem 1.25rem;
-    margin-bottom: 1.5rem;
-    border-left: 3px solid var(--color-border-tertiary);
-  }
-
-  .penalty-box.has-penalty { border-left-color: #E24B4A; }
-
-  .penalty-title {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--color-text-tertiary);
-    margin-bottom: 4px;
-  }
-
-  .penalty-value {
-    font-size: 20px;
-    font-weight: 500;
-    font-family: 'DM Mono', monospace;
-    color: var(--color-text-primary);
-  }
-
-  .penalty-note {
-    font-size: 12px;
-    color: var(--color-text-secondary);
-    margin-top: 4px;
-  }
-
-  .disclaimer {
-    font-size: 11px;
-    color: var(--color-text-tertiary);
-    line-height: 1.6;
-    padding-top: 1rem;
-    border-top: 0.5px solid var(--color-border-tertiary);
-  }
-
-  .auto-note {
-    font-size: 11px;
-    color: var(--color-text-info);
-    margin-top: 3px;
-  }
-
-  .reset-btn {
-    font-size: 13px;
-    color: var(--color-text-secondary);
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    text-decoration: underline;
-    font-family: inherit;
-    margin-top: 0.75rem;
-  }
-
-  .reset-btn:hover { color: var(--color-text-primary); }
-
-  .learn-more-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 12px;
-    color: var(--color-text-info);
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-family: inherit;
-    padding: 0;
-    margin-top: 0.5rem;
-  }
+/* Error banner */
+.error-banner {
+  background: var(--red-bg);
+  border: 1px solid var(--red-border);
+  color: #5C1915;
+  padding: 16px 20px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 20px;
+  font-size: 14px;
+  display: none;
+}
+.error-banner.visible { display: block; }
 </style>
+</head>
+<body>
 
-<div class="ll97">
-  <h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">LL97 Compliance Risk Screener — Enter building details to assess GHG emissions risk</h2>
-
-  <div class="hero">
-    <div class="hero-badge">LL97 Compliance Tool</div>
-    <h1>Building <span>Emissions Risk</span> Screener</h1>
-    <p>Pre-compliance screening for NYC Local Law 97. Enter your building details below to assess GHG intensity and penalty exposure for the 2024–2029 compliance period.</p>
+<!-- NAV -->
+<nav class="nav">
+  <div class="container nav-inner">
+    <a href="#" class="brand">
+      <span class="brand-mark">LL</span>
+      <span>LL97 Screener</span>
+    </a>
+    <div class="nav-links">
+      <a href="#how-it-works">How it works</a>
+      <a href="#screener">Run screening</a>
+      <a href="#about">About</a>
+    </div>
+    <a href="#screener" class="nav-cta">Get started</a>
   </div>
+</nav>
 
-  <div class="section-title">Building profile</div>
-
-  <div class="form-grid">
-    <div class="field-group">
-      <div class="field-label">Building type</div>
-      <select id="buildingType" onchange="onTypeChange()">
-        <option value="Office">Office</option>
-        <option value="Education">Education</option>
-        <option value="Retail">Retail</option>
-        <option value="Lodging/residential">Lodging / Residential</option>
-        <option value="Healthcare">Healthcare</option>
-        <option value="Entertainment/public assembly">Entertainment / Assembly</option>
-        <option value="Warehouse/storage">Warehouse / Storage</option>
-        <option value="Manufacturing/industrial">Manufacturing / Industrial</option>
-        <option value="Public services">Public Services</option>
-        <option value="Other">Other</option>
-      </select>
+<!-- HERO -->
+<header class="hero">
+  <div class="container">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      Neural network trained on 1,593 buildings
     </div>
+    <h1>Will your building<br /><span class="accent">survive LL97?</span></h1>
+    <p class="sub">Estimate your carbon risk, compliance cost, and retrofit strategy in seconds. Built for owners, asset managers, and ESG officers.</p>
+    <a href="#screener" class="hero-cta">
+      Run screening
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
 
-    <div class="field-group">
-      <div class="field-label">Gross floor area</div>
-      <div class="field-row">
-        <input type="number" id="sqft" placeholder="e.g. 50000" min="0" oninput="clearAuto('sqft')" />
-        <span class="unit-label">sq ft</span>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-val mono">$268</div>
+        <div class="hero-stat-label">Per tCO₂e fine</div>
       </div>
-      <div class="field-sub" id="sqft-note"></div>
-    </div>
-
-    <div class="field-group">
-      <div class="field-label">Year built</div>
-      <input type="number" id="yearbuilt" placeholder="e.g. 1985" min="1800" max="2025" oninput="clearAuto('yearbuilt')" />
-      <div class="field-sub" id="yearbuilt-note"></div>
-    </div>
-
-    <div class="field-group" style="grid-column: 1 / -1;">
-      <div class="field-label">Air temperature</div>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-        <div>
-          <div class="field-sub" style="margin-bottom:4px;">Winter (°C)</div>
-          <input type="number" id="airTempWinter" placeholder="avg winter" step="0.1" oninput="clearAuto('airTempWinter')" />
-          <div class="field-sub" id="airTempWinter-note"></div>
-        </div>
-        <div>
-          <div class="field-sub" style="margin-bottom:4px;">Summer (°C)</div>
-          <input type="number" id="airTempSummer" placeholder="avg summer" step="0.1" oninput="clearAuto('airTempSummer')" />
-          <div class="field-sub" id="airTempSummer-note"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="field-group" style="grid-column: 1 / -1;">
-      <div class="field-label">Dew point temperature</div>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-        <div>
-          <div class="field-sub" style="margin-bottom:4px;">Winter (°C)</div>
-          <input type="number" id="dewTempWinter" placeholder="avg winter" step="0.1" oninput="clearAuto('dewTempWinter')" />
-          <div class="field-sub" id="dewTempWinter-note"></div>
-        </div>
-        <div>
-          <div class="field-sub" style="margin-bottom:4px;">Summer (°C)</div>
-          <input type="number" id="dewTempSummer" placeholder="avg summer" step="0.1" oninput="clearAuto('dewTempSummer')" />
-          <div class="field-sub" id="dewTempSummer-note"></div>
-        </div>
+      <div class="hero-stat">
+        <div class="hero-stat-val mono">2024</div>
+        <div class="hero-stat-label">First compliance year</div>
       </div>
     </div>
   </div>
+</header>
 
-  <button class="cta-btn" onclick="runScreening()">
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M8 5v3l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-    Run compliance screening
-  </button>
+<!-- HOW IT WORKS -->
+<section id="how-it-works">
+  <div class="container">
+    <div class="section-label">How it works</div>
+    <h2 class="section-title">Three steps to your risk score.</h2>
+    <p class="section-desc">Built on the Building Data Genome Project 2 (BDG2), a dataset of anonymized energy and weather records from buildings worldwide.</p>
 
-  <div id="resultPanel" class="result-panel">
-    <div class="section-title">Assessment result</div>
-
-    <div id="riskCard" class="risk-card">
-      <div id="riskLabel" class="risk-label"></div>
-      <div id="riskHeadline" class="risk-headline"></div>
-      <div id="riskDesc" class="risk-desc"></div>
-    </div>
-
-    <div class="metrics-row">
-      <div class="metric-card">
-        <div class="metric-label">Your GHG intensity</div>
-        <div class="metric-value" id="metricIntensity">—</div>
-        <div class="metric-unit">tCO₂e / sq ft</div>
+    <div class="how-grid">
+      <div class="how-card">
+        <div class="how-num mono">01 — CHOOSE PATH</div>
+        <div class="how-title">Bills or profile?</div>
+        <div class="how-desc">If you have 12 months of utility bills, we compute emissions exactly. If not, our neural network predicts from building features and climate.</div>
       </div>
-      <div class="metric-card">
-        <div class="metric-label">LL97 cap (2024–29)</div>
-        <div class="metric-value" id="metricCap">—</div>
-        <div class="metric-unit">tCO₂e / sq ft</div>
+      <div class="how-card">
+        <div class="how-num mono">02 — CLASSIFY</div>
+        <div class="how-title">LL97 risk level</div>
+        <div class="how-desc">High — above the cap. Medium — within 20% below. Low — more than 20% below. Classification follows LL97's official thresholds.</div>
       </div>
-      <div class="metric-card">
-        <div class="metric-label">vs. cap</div>
-        <div class="metric-value" id="metricDelta">—</div>
-        <div class="metric-unit" id="metricDeltaLabel">tCO₂e / sq ft</div>
+      <div class="how-card">
+        <div class="how-num mono">03 — PLAN</div>
+        <div class="how-title">See your exposure</div>
+        <div class="how-desc">Penalty estimates for 2024–2029 and 2030–2034 compliance periods, plus prioritized retrofit recommendations.</div>
       </div>
     </div>
-
-    <div class="bar-section">
-      <div class="bar-labels">
-        <span>0</span>
-        <span id="barCapLabel"></span>
-      </div>
-      <div class="bar-track">
-        <div id="barFill" class="bar-fill" style="width:0%"></div>
-        <div id="barCap" class="bar-cap-line" style="left:80%"></div>
-      </div>
-      <div style="font-size:11px; color: var(--color-text-tertiary);">
-        Estimated intensity vs LL97 cap (capped display at 125%)
-      </div>
-    </div>
-
-    <div id="penaltyBox" class="penalty-box">
-      <div class="penalty-title">Estimated annual penalty exposure</div>
-      <div class="penalty-value" id="penaltyValue">$0</div>
-      <div class="penalty-note" id="penaltyNote"></div>
-    </div>
-
-    <div class="disclaimer" id="disclaimerText"></div>
-
-    <button class="reset-btn" onclick="resetForm()">← Start over</button>
   </div>
-</div>
+</section>
+
+<!-- SCREENER FORM -->
+<section id="screener">
+  <div class="container">
+    <div class="section-label">Run screening</div>
+    <h2 class="section-title">Enter your building.</h2>
+    <p class="section-desc" style="margin-bottom: 48px;">Start by telling us whether you have utility bills. That single choice determines whether we calculate your emissions directly or predict them with our neural network.</p>
+
+    <div class="form-wrap">
+      <div id="errorBanner" class="error-banner"></div>
+
+      <!-- SECTION A: ENERGY (MOVED TO TOP) -->
+      <div class="form-group">
+        <div class="form-group-header">
+          <div class="form-group-icon">
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M11 2L4 12h6l-1 6 7-10h-6l1-6z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div>
+            <div class="form-group-title">Start here — do you have energy bills?</div>
+            <div class="form-group-sub">With bills, we calculate your exact emissions directly. Without, our neural network predicts from building features.</div>
+          </div>
+        </div>
+
+        <div class="toggle" id="energyToggle" onclick="toggleEnergy()">
+          <div class="toggle-switch"></div>
+          <div class="toggle-content">
+            <div class="toggle-title">Yes, I have 12 months of utility bills</div>
+            <div class="toggle-desc">Direct calculation path — highest accuracy</div>
+          </div>
+        </div>
+
+        <div class="advanced-panel" id="energyPanel">
+          <div class="form-grid">
+            <div class="field">
+              <label class="field-label">Annual electricity <span class="field-opt">kWh / year</span></label>
+              <input class="field-input" type="number" id="elec" placeholder="e.g. 850,000" min="0" />
+              <div class="field-hint"></div>
+            </div>
+            <div class="field">
+              <label class="field-label">Annual natural gas <span class="field-opt">kWh / year</span></label>
+              <input class="field-input" type="number" id="gas" placeholder="e.g. 1,200,000" min="0" />
+              <div class="field-hint">1 therm ≈ 29.3 kWh</div>
+            </div>
+            <div class="field">
+              <label class="field-label">Annual steam <span class="field-opt">kWh / year</span></label>
+              <input class="field-input" type="number" id="steam" placeholder="e.g. 0" min="0" />
+              <div class="field-hint">Enter 0 if not applicable</div>
+            </div>
+            <div class="field">
+              <label class="field-label">Annual fuel oil <span class="field-opt">kWh / year</span></label>
+              <input class="field-input" type="number" id="oil" placeholder="e.g. 0" min="0" />
+              <div class="field-hint">Enter 0 if not applicable</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION B: BUILDING -->
+      <div class="form-group">
+        <div class="form-group-header">
+          <div class="form-group-icon">
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 17V7l7-4 7 4v10M3 17h14M7 17v-5h6v5M7 10h.01M10 10h.01M13 10h.01" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div>
+            <div class="form-group-title">Building profile</div>
+            <div class="form-group-sub">Physical characteristics and usage type</div>
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="field">
+            <label class="field-label">Building type <span style="color: var(--red);">*</span></label>
+            <select class="field-select" id="buildingType">
+              <option value="Office">Office</option>
+              <option value="Lodging/residential">Residential / Multifamily</option>
+              <option value="Education">Education</option>
+              <option value="Retail">Retail</option>
+              <option value="Healthcare">Healthcare</option>
+              <option value="Entertainment/public assembly">Entertainment / Assembly</option>
+              <option value="Warehouse/storage">Warehouse / Storage</option>
+              <option value="Manufacturing/industrial">Manufacturing / Industrial</option>
+              <option value="Public services">Public Services</option>
+              <option value="Other">Other</option>
+            </select>
+            <div class="field-hint"></div>
+          </div>
+          <div class="field">
+            <label class="field-label">Gross floor area <span style="color: var(--red);">*</span></label>
+            <input class="field-input" type="number" id="sqft" placeholder="e.g. 50,000" min="100" />
+            <div class="field-hint">In square feet</div>
+          </div>
+          <div class="field">
+            <label class="field-label">Year built <span class="field-opt">optional</span></label>
+            <input class="field-input" type="number" id="yearbuilt" placeholder="e.g. 1985" min="1800" max="2026" />
+            <div class="field-hint" id="yearbuilt-hint"></div>
+          </div>
+          <div class="field">
+            <label class="field-label">Number of floors <span class="field-opt">optional</span></label>
+            <input class="field-input" type="number" id="floors" placeholder="e.g. 8" min="1" />
+            <div class="field-hint" id="floors-hint"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION C: CLIMATE -->
+      <div class="form-group">
+        <div class="form-group-header">
+          <div class="form-group-icon">
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M7 16a4 4 0 01-1-7.87 5 5 0 019.9 1.26A3.5 3.5 0 0115 16H7z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div>
+            <div class="form-group-title">Climate data</div>
+            <div class="form-group-sub">Auto-filled with dataset averages. Override if known.</div>
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="field">
+            <label class="field-label">Air temperature — winter <span class="field-opt">°C</span></label>
+            <input class="field-input" type="number" id="airTempWinter" step="0.1" placeholder="Avg: 6.5" />
+            <div class="field-hint" id="airTempWinter-hint"></div>
+          </div>
+          <div class="field">
+            <label class="field-label">Air temperature — summer <span class="field-opt">°C</span></label>
+            <input class="field-input" type="number" id="airTempSummer" step="0.1" placeholder="Avg: 24.1" />
+            <div class="field-hint" id="airTempSummer-hint"></div>
+          </div>
+          <div class="field">
+            <label class="field-label">Dew point — winter <span class="field-opt">°C</span></label>
+            <input class="field-input" type="number" id="dewTempWinter" step="0.1" placeholder="Avg: 0.3" />
+            <div class="field-hint" id="dewTempWinter-hint"></div>
+          </div>
+          <div class="field">
+            <label class="field-label">Dew point — summer <span class="field-opt">°C</span></label>
+            <input class="field-input" type="number" id="dewTempSummer" step="0.1" placeholder="Avg: 16.2" />
+            <div class="field-hint" id="dewTempSummer-hint"></div>
+          </div>
+        </div>
+      </div>
+
+      <button class="submit-btn" id="submitBtn" onclick="runScreening()">
+        <span class="submit-text">Run compliance screening</span>
+        <span class="submit-loader"></span>
+      </button>
+    </div>
+
+    <!-- RESULTS -->
+    <div id="results">
+      <div style="height: 48px;"></div>
+
+      <div class="result-hero" id="resultHero">
+        <div class="result-face" id="resultFace">😎</div>
+        <div class="result-label" id="resultLabel">Low risk</div>
+        <div class="result-title" id="resultTitle">You're in the clear.</div>
+        <div class="result-desc" id="resultDesc"></div>
+        <div class="confidence-bar">
+          <span class="confidence-dot" id="confDot"></span>
+          <span id="confText">Model B · Screening estimate</span>
+        </div>
+      </div>
+
+      <div class="metrics">
+        <div class="metric">
+          <div class="metric-label">Your GHG intensity</div>
+          <div class="metric-val mono" id="mGhg">—</div>
+          <div class="metric-sub">tCO₂e per sqft</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">LL97 2024 cap</div>
+          <div class="metric-val mono" id="mCap">—</div>
+          <div class="metric-sub">tCO₂e per sqft</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Annual emissions</div>
+          <div class="metric-val mono" id="mTotal">—</div>
+          <div class="metric-sub">tCO₂e per year</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Estimated 2024 penalty</div>
+          <div class="metric-val mono" id="mPenalty">—</div>
+          <div class="metric-sub">USD per year</div>
+        </div>
+      </div>
+
+      <!-- Timeline -->
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Compliance timeline</div>
+            <div class="panel-sub">LL97 caps tighten in 2030 — what happens to your building?</div>
+          </div>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="timelineChart" role="img" aria-label="Your emissions vs LL97 caps across 2024, 2030, and 2050"></canvas>
+        </div>
+        <div class="timeline-period">
+          <div class="period-card" id="period2024">
+            <div class="period-year">2024 – 2029</div>
+            <div class="period-cap" id="cap2024">Cap: —</div>
+            <div class="period-penalty" id="pen2024">—</div>
+          </div>
+          <div class="period-card" id="period2030">
+            <div class="period-year">2030 – 2034</div>
+            <div class="period-cap" id="cap2030">Cap: —</div>
+            <div class="period-penalty" id="pen2030">—</div>
+          </div>
+          <div class="period-card" id="period2050">
+            <div class="period-year">2050 target</div>
+            <div class="period-cap">Cap: near-zero</div>
+            <div class="period-penalty" id="pen2050">Full decarb</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Drivers -->
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Primary risk drivers</div>
+            <div class="panel-sub">What's contributing most to your risk score</div>
+          </div>
+        </div>
+        <div class="drivers" id="driversContainer"></div>
+      </div>
+
+      <!-- Recommendations -->
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Recommended actions</div>
+            <div class="panel-sub">Prioritized by estimated emission reduction</div>
+          </div>
+        </div>
+        <div class="recs" id="recsContainer"></div>
+      </div>
+
+      <button class="reset-btn" onclick="resetForm()">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8a5 5 0 018.66-3.4M13 8a5 5 0 01-8.66 3.4M11 2v3h-3M5 14v-3h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Start over
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT / FOOTER -->
+<footer class="footer" id="about">
+  <div class="container">
+    <p>
+      Built as a pre-compliance screening tool for NYC Local Law 97.<br />
+      Model trained on the <a href="https://github.com/buds-lab/building-data-genome-project-2" target="_blank" rel="noopener">Building Data Genome Project 2</a>.
+    </p>
+    <p style="margin-top: 20px; font-size: 13px;">
+      This tool provides estimates only and is not a substitute for a certified energy audit.
+    </p>
+  </div>
+</footer>
 
 <script>
-const DEFAULTS = {
-  sqft: 89734,
+// =============================================================
+// CONFIG
+// =============================================================
+const API_URL = 'https://ll97-api.onrender.com/predict'; // update after Render deploy
+
+const NYC_DEFAULTS = {
   yearbuilt: 1967,
-  airTempWinter: 6.47,
-  airTempSummer: 24.07,
-  dewTempWinter: 0.33,
-  dewTempSummer: 16.16
+  floors: 4,
+  airTempWinter: 6.5,
+  airTempSummer: 24.1,
+  dewTempWinter: 0.3,
+  dewTempSummer: 16.2,
 };
 
-const LL97_CAPS = {
-  'Office': 0.00846,
-  'Education': 0.00758,
-  'Retail': 0.01181,
-  'Lodging/residential': 0.00675,
-  'Healthcare': 0.02381,
-  'Entertainment/public assembly': 0.00765,
-  'Warehouse/storage': 0.00403,
-  'Manufacturing/industrial': 0.01181,
-  'Public services': 0.00846,
-  'Other': 0.00846
+const LL97_CAPS_2024 = {
+  'Office': 0.00846, 'Education': 0.00758, 'Retail': 0.01181,
+  'Lodging/residential': 0.00675, 'Healthcare': 0.02381,
+  'Entertainment/public assembly': 0.00765, 'Warehouse/storage': 0.00403,
+  'Manufacturing/industrial': 0.01181, 'Public services': 0.00846, 'Other': 0.00846,
+};
+const LL97_CAPS_2030 = {
+  'Office': 0.00453, 'Education': 0.00344, 'Retail': 0.00403,
+  'Lodging/residential': 0.00407, 'Healthcare': 0.01193,
+  'Entertainment/public assembly': 0.00426, 'Warehouse/storage': 0.00110,
+  'Manufacturing/industrial': 0.00574, 'Public services': 0.00453, 'Other': 0.00453,
 };
 
-const TYPE_BASELINE = {
-  'Office': 0.00582,
-  'Education': 0.00603,
-  'Retail': 0.01256,
-  'Lodging/residential': 0.00739,
-  'Healthcare': 0.00978,
-  'Entertainment/public assembly': 0.00499,
-  'Warehouse/storage': 0.00312,
-  'Manufacturing/industrial': 0.01775,
-  'Public services': 0.00508,
-  'Other': 0.00803
-};
+const ELEC_FACTOR  = 0.000288962; // tCO2e / kWh (2024-2029)
+const GAS_FACTOR   = 0.00005311;   // tCO2e / kWh (converted from 0.00531/therm ÷ 29.3)
+const STEAM_FACTOR = 0.0000441;
+const OIL_FACTOR   = 0.00007421;   // tCO2e / kWh fuel oil no.2
+const PENALTY_PER_TON = 268;       // $ per tCO2e, LL97 official
 
-const autoFilled = {};
+// =============================================================
+// STATE
+// =============================================================
+let energyMode = false;
+let timelineChart = null;
 
-function clearAuto(id) { autoFilled[id] = false; }
+// =============================================================
+// UI HANDLERS
+// =============================================================
+function toggleEnergy() {
+  energyMode = !energyMode;
+  document.getElementById('energyToggle').classList.toggle('active', energyMode);
+  document.getElementById('energyPanel').classList.toggle('open', energyMode);
+}
 
-function onTypeChange() {}
-
-function fillDefaults() {
-  const fields = ['sqft','yearbuilt','airTempWinter','airTempSummer','dewTempWinter','dewTempSummer'];
-  fields.forEach(id => {
+// Auto-fill defaults when user leaves a field blank
+function applyDefaults() {
+  const map = {
+    yearbuilt: 'yearbuilt',
+    floors: 'floors',
+    airTempWinter: 'airTempWinter',
+    airTempSummer: 'airTempSummer',
+    dewTempWinter: 'dewTempWinter',
+    dewTempSummer: 'dewTempSummer',
+  };
+  for (const id in map) {
     const el = document.getElementById(id);
-    if (!el.value || autoFilled[id]) {
-      el.value = DEFAULTS[id];
+    const hint = document.getElementById(id + '-hint');
+    if (!el.value) {
       el.classList.add('auto-filled');
-      autoFilled[id] = true;
-      const noteEl = document.getElementById(id + '-note');
-      if (noteEl) noteEl.textContent = 'Using dataset average';
-      noteEl && noteEl.classList.add ? noteEl.className = 'auto-note' : null;
+      if (hint) { hint.textContent = 'Using NYC average'; hint.classList.add('active'); }
+    } else {
+      el.classList.remove('auto-filled');
+      if (hint) { hint.textContent = ''; hint.classList.remove('active'); }
     }
+  }
+}
+['yearbuilt','floors','airTempWinter','airTempSummer','dewTempWinter','dewTempSummer']
+  .forEach(id => {
+    document.getElementById(id).addEventListener('input', applyDefaults);
+  });
+applyDefaults();
+
+// =============================================================
+// FETCH + PREDICT
+// =============================================================
+function val(id) {
+  const v = document.getElementById(id).value;
+  return v === '' ? null : parseFloat(v);
+}
+
+async function runScreening() {
+  const sqft = val('sqft');
+  const type = document.getElementById('buildingType').value;
+
+  document.getElementById('errorBanner').classList.remove('visible');
+
+  if (!sqft || sqft < 100) {
+    showError('Please enter a valid square footage (at least 100 sqft).');
+    return;
+  }
+
+  const btn = document.getElementById('submitBtn');
+  btn.classList.add('loading');
+  btn.disabled = true;
+
+  const payload = {
+    sqft: sqft,
+    primaryspaceusage: type,
+    yearbuilt: val('yearbuilt') ?? NYC_DEFAULTS.yearbuilt,
+    airTemperature_winter: val('airTempWinter') ?? NYC_DEFAULTS.airTempWinter,
+    airTemperature_summer: val('airTempSummer') ?? NYC_DEFAULTS.airTempSummer,
+    dewTemperature_winter: val('dewTempWinter') ?? NYC_DEFAULTS.dewTempWinter,
+    dewTemperature_summer: val('dewTempSummer') ?? NYC_DEFAULTS.dewTempSummer,
+  };
+
+  const hasEnergy = energyMode && (
+    val('elec') !== null || val('gas') !== null ||
+    val('steam') !== null || val('oil') !== null
+  );
+
+  try {
+    let data;
+
+    if (hasEnergy) {
+      // ======= DIRECT CALCULATION PATH =======
+      // User provided energy bills — compute emissions directly,
+      // skip the neural network entirely.
+      data = directCalculate({
+        sqft: sqft,
+        type: type,
+        elec:  val('elec')  ?? 0,
+        gas:   val('gas')   ?? 0,
+        steam: val('steam') ?? 0,
+        oil:   val('oil')   ?? 0,
+      });
+    } else {
+      // ======= NEURAL NETWORK PATH (Model B) =======
+      try {
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) throw new Error('API ' + res.status);
+        data = await res.json();
+      } catch (err) {
+        data = localFallback(payload);
+      }
+    }
+
+    renderResult(data, { ...payload,
+      annual_electricity_kWh: val('elec'),
+      annual_gas_kWh:         val('gas'),
+      annual_steam_kWh:       val('steam'),
+    });
+    document.getElementById('results').classList.add('visible');
+    document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } catch (err) {
+    showError('Something went wrong: ' + err.message);
+  } finally {
+    btn.classList.remove('loading');
+    btn.disabled = false;
+  }
+}
+
+// Direct emissions calculation using LL97 official coefficients
+// Returns the same shape as the API for unified rendering
+function directCalculate({ sqft, type, elec, gas, steam, oil }) {
+  const cap = LL97_CAPS_2024[type] || 0.00846;
+
+  // Total emissions (tCO2e/year)
+  const emissions = elec * ELEC_FACTOR
+                  + gas  * GAS_FACTOR
+                  + steam * STEAM_FACTOR
+                  + oil  * OIL_FACTOR;
+
+  const ghg = emissions / sqft;
+  const ratio = ghg / cap;
+
+  // LL97-aligned risk classification:
+  //   High   : emissions ABOVE the cap         (ratio > 1.0)
+  //   Medium : within 20% below the cap        (0.8 <= ratio <= 1.0)
+  //   Low    : more than 20% below the cap     (ratio < 0.8)
+  let risk;
+  if (ratio > 1.0)      risk = 'high';
+  else if (ratio >= 0.8) risk = 'medium';
+  else                   risk = 'low';
+
+  const penalty = emissions > cap * sqft
+    ? Math.round((emissions - cap * sqft) * PENALTY_PER_TON)
+    : 0;
+
+  return {
+    risk: risk,
+    model_used: 'Direct calculation',
+    probabilities: { [risk]: 1.0 },
+    ll97_cap: cap,
+    estimated_ghg_intensity: ghg,
+    estimated_annual_emissions: emissions,
+    estimated_annual_penalty_usd: penalty,
+    note: 'Emissions calculated directly from your utility bills using LL97 coefficients.',
+    _direct: true,
+  };
+}
+
+function showError(msg) {
+  const b = document.getElementById('errorBanner');
+  b.textContent = msg;
+  b.classList.add('visible');
+  b.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+// Fallback heuristic when API is offline
+function localFallback(p) {
+  const cap = LL97_CAPS_2024[p.primaryspaceusage] || 0.00846;
+  let ghg;
+
+  if (p.annual_electricity_kWh != null) {
+    ghg = (p.annual_electricity_kWh * ELEC_FACTOR +
+           (p.annual_gas_kWh   || 0) * GAS_FACTOR +
+           (p.annual_steam_kWh || 0) * STEAM_FACTOR) / p.sqft;
+  } else {
+    const baseline = {
+      'Office': 0.00582, 'Education': 0.00603, 'Retail': 0.01256,
+      'Lodging/residential': 0.00739, 'Healthcare': 0.00978,
+      'Entertainment/public assembly': 0.00499, 'Warehouse/storage': 0.00312,
+      'Manufacturing/industrial': 0.01775, 'Public services': 0.00508, 'Other': 0.00803,
+    };
+    const age = 2024 - p.yearbuilt;
+    const ageF = age > 74 ? 1.18 : age > 54 ? 1.09 : age > 34 ? 1.03 : 1.0;
+    const coldF = p.airTemperature_winter < 0 ? 1.08 : p.airTemperature_winter < 5 ? 1.04 : 1.0;
+    ghg = (baseline[p.primaryspaceusage] || 0.006) * ageF * coldF;
+  }
+
+  const ratio = ghg / cap;
+  // Match LL97 exact rules:
+  //   High   : ratio > 1.0  (above cap)
+  //   Medium : 0.8 <= ratio <= 1.0  (within 20% below cap)
+  //   Low    : ratio < 0.8  (more than 20% below cap)
+  const risk = ratio > 1.0 ? 'high' : ratio >= 0.8 ? 'medium' : 'low';
+  const proba = { low: 0, medium: 0, high: 0 };
+  proba[risk] = 0.75;
+  proba[risk === 'high' ? 'medium' : risk === 'low' ? 'medium' : 'low'] = 0.2;
+  proba[risk === 'high' ? 'low' : risk === 'low' ? 'high' : 'high'] = 0.05;
+
+  return {
+    risk: risk,
+    model_used: 'Model B (fallback)',
+    probabilities: proba,
+    ll97_cap: cap,
+    estimated_ghg_intensity: ghg,
+    estimated_annual_penalty_usd: ghg > cap ? Math.round((ghg - cap) * p.sqft * PENALTY_PER_TON) : 0,
+    note: 'Estimate from local fallback model — live ML API unavailable.',
+    _fallback: true,
+  };
+}
+
+// =============================================================
+// RENDER
+// =============================================================
+function renderResult(data, payload) {
+  const risk = data.risk;
+  const faces = { low: '😎', medium: '😐', high: '😰' };
+  const labels = { low: 'Low risk', medium: 'Medium risk', high: 'High risk' };
+  const titles = {
+    low: "You're in the clear.",
+    medium: 'Borderline exposure.',
+    high: 'Action required.',
+  };
+  const descs = {
+    low: "Your emissions are more than 20% below the LL97 cap for the 2024–2029 period. You are comfortably compliant today — plan now for the tighter 2030 caps.",
+    medium: "Your emissions are within 20% of the LL97 cap. Minor operational changes could push you over — start evaluating retrofits before the 2030 cycle.",
+    high: "Your emissions exceed the LL97 cap. You are liable for annual penalties at $268 per tCO₂e above the limit, recurring every year until emissions come down.",
+  };
+
+  // Hero
+  const hero = document.getElementById('resultHero');
+  hero.className = 'result-hero ' + risk;
+  document.getElementById('resultFace').textContent = faces[risk];
+  document.getElementById('resultLabel').textContent = labels[risk];
+  document.getElementById('resultTitle').textContent = titles[risk];
+  document.getElementById('resultDesc').textContent = descs[risk];
+
+  // Confidence label
+  let confLabel;
+  if (data.model_used === 'Direct calculation') {
+    confLabel = 'Direct calculation · Highest confidence';
+  } else if (data.model_used && data.model_used.includes('A')) {
+    confLabel = data.model_used + ' · High confidence';
+  } else {
+    confLabel = data.model_used + ' · Screening estimate';
+  }
+  document.getElementById('confText').textContent = confLabel;
+
+  // Metrics
+  const ghg = data.estimated_ghg_intensity ?? 0;
+  const cap = data.ll97_cap;
+  const cap2030 = LL97_CAPS_2030[payload.primaryspaceusage] || cap * 0.55;
+  const totalEmissions = ghg * payload.sqft;
+  const penalty = data.estimated_annual_penalty_usd;
+
+  document.getElementById('mGhg').textContent = ghg ? ghg.toFixed(5) : '—';
+  document.getElementById('mCap').textContent = cap.toFixed(5);
+  document.getElementById('mTotal').textContent = Math.round(totalEmissions).toLocaleString();
+  document.getElementById('mPenalty').textContent = '$' + Math.round(penalty).toLocaleString();
+
+  document.getElementById('mGhg').className = 'metric-val mono ' + (ghg > cap ? 'red' : ghg > cap * 0.8 ? 'amber' : 'green');
+  document.getElementById('mPenalty').className = 'metric-val mono ' + (penalty > 0 ? 'red' : 'green');
+
+  // Timeline
+  renderTimeline(ghg, cap, cap2030, payload.sqft);
+
+  const pen2024 = ghg > cap ? Math.round((ghg - cap) * payload.sqft * PENALTY_PER_TON) : 0;
+  const pen2030 = ghg > cap2030 ? Math.round((ghg - cap2030) * payload.sqft * PENALTY_PER_TON) : 0;
+
+  document.getElementById('cap2024').textContent = 'Cap: ' + cap.toFixed(5);
+  document.getElementById('cap2030').textContent = 'Cap: ' + cap2030.toFixed(5);
+  document.getElementById('pen2024').textContent = pen2024 > 0 ? '$' + pen2024.toLocaleString() + '/yr' : 'Compliant';
+  document.getElementById('pen2030').textContent = pen2030 > 0 ? '$' + pen2030.toLocaleString() + '/yr' : 'Compliant';
+  document.getElementById('pen2024').className = 'period-penalty ' + (pen2024 > 0 ? 'red' : 'green');
+  document.getElementById('pen2030').className = 'period-penalty ' + (pen2030 > 0 ? 'red' : 'green');
+  document.getElementById('period2024').classList.toggle('active', pen2024 > 0);
+  document.getElementById('period2030').classList.toggle('active', pen2030 > 0);
+
+  // Drivers
+  renderDrivers(payload, ghg, cap);
+
+  // Recommendations
+  renderRecommendations(risk, payload);
+}
+
+function renderTimeline(ghg, cap2024, cap2030, sqft) {
+  const ctx = document.getElementById('timelineChart');
+  if (timelineChart) timelineChart.destroy();
+
+  const yourEmissions = ghg * sqft;
+  const cap2024Total = cap2024 * sqft;
+  const cap2030Total = cap2030 * sqft;
+
+  timelineChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['2024', '2027', '2030', '2035', '2040', '2045', '2050'],
+      datasets: [
+        {
+          label: 'Your emissions',
+          data: Array(7).fill(yourEmissions),
+          borderColor: '#0A0A0A',
+          backgroundColor: 'rgba(10,10,10,0.05)',
+          borderWidth: 2.5,
+          pointRadius: 4,
+          pointBackgroundColor: '#0A0A0A',
+          tension: 0,
+        },
+        {
+          label: 'LL97 cap',
+          data: [cap2024Total, cap2024Total, cap2030Total, cap2030Total * 0.8, cap2030Total * 0.5, cap2030Total * 0.25, 0],
+          borderColor: '#B0342E',
+          backgroundColor: 'rgba(176,52,46,0.08)',
+          borderWidth: 2,
+          borderDash: [6, 4],
+          pointRadius: 4,
+          pointBackgroundColor: '#B0342E',
+          fill: 'origin',
+          tension: 0.2,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'top',
+          align: 'end',
+          labels: { boxWidth: 14, boxHeight: 14, padding: 16, font: { size: 13 } },
+        },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => ctx.dataset.label + ': ' + Math.round(ctx.parsed.y).toLocaleString() + ' tCO₂e',
+          },
+        },
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: { display: true, text: 'Annual emissions (tCO₂e)', font: { size: 12 } },
+          grid: { color: 'rgba(10,10,10,0.06)' },
+        },
+        x: {
+          grid: { display: false },
+        },
+      },
+    },
   });
 }
 
-function getValue(id) {
-  const el = document.getElementById(id);
-  return el.value ? parseFloat(el.value) : DEFAULTS[id];
+function renderDrivers(payload, ghg, cap) {
+  const age = 2024 - payload.yearbuilt;
+  const drivers = [];
+
+  // Age driver
+  const ageWeight = Math.min(100, (age / 80) * 100);
+  drivers.push({ label: 'Building age (' + age + ' yrs)', pct: Math.round(ageWeight), color: ageWeight > 60 ? '#B0342E' : ageWeight > 30 ? '#B5641C' : '#2F7D3E' });
+
+  // Type driver
+  const typeWeight = (cap < 0.006) ? 80 : 50;
+  drivers.push({ label: 'Building type (' + payload.primaryspaceusage + ')', pct: typeWeight, color: typeWeight > 60 ? '#B0342E' : '#B5641C' });
+
+  // Climate driver
+  const coldWeight = Math.max(0, Math.min(100, (10 - payload.airTemperature_winter) * 10));
+  drivers.push({ label: 'Winter climate (' + payload.airTemperature_winter.toFixed(1) + '°C)', pct: Math.round(coldWeight), color: coldWeight > 50 ? '#B5641C' : '#2F7D3E' });
+
+  // Size driver
+  const sizeWeight = Math.min(100, (payload.sqft / 200000) * 100);
+  drivers.push({ label: 'Floor area (' + payload.sqft.toLocaleString() + ' sqft)', pct: Math.round(sizeWeight), color: '#1E5FA5' });
+
+  if (payload.annual_gas_kWh != null) {
+    const gasRatio = payload.annual_gas_kWh / (payload.annual_electricity_kWh + payload.annual_gas_kWh + payload.annual_steam_kWh);
+    drivers.push({ label: 'Gas dominance (' + Math.round(gasRatio * 100) + '%)', pct: Math.round(gasRatio * 100), color: gasRatio > 0.5 ? '#B0342E' : '#B5641C' });
+  }
+
+  drivers.sort((a, b) => b.pct - a.pct);
+
+  const container = document.getElementById('driversContainer');
+  container.innerHTML = drivers.map(d => `
+    <div class="driver">
+      <div class="driver-label">${d.label}</div>
+      <div class="driver-bar-wrap">
+        <div class="driver-bar" style="width: ${d.pct}%; background: ${d.color};"></div>
+      </div>
+      <div class="driver-pct mono">${d.pct}%</div>
+    </div>
+  `).join('');
 }
 
-function runScreening() {
-  fillDefaults();
+function renderRecommendations(risk, payload) {
+  const age = 2024 - payload.yearbuilt;
+  const recs = [];
 
-  const type = document.getElementById('buildingType').value;
-  const sqft = getValue('sqft');
-  const yearbuilt = getValue('yearbuilt');
-  const airW = getValue('airTempWinter');
-  const airS = getValue('airTempSummer');
-  const dewW = getValue('dewTempWinter');
-  const dewS = getValue('dewTempSummer');
-
-  const cap = LL97_CAPS[type] || 0.00846;
-  let baseIntensity = TYPE_BASELINE[type] || 0.006;
-
-  const tempFactor = 1 + (airW < 0 ? 0.08 : airW < 5 ? 0.04 : 0) + (airS > 28 ? 0.05 : 0);
-  const dewFactor = 1 + (dewW < -2 ? 0.03 : 0) + (dewS > 18 ? 0.02 : 0);
-  const ageFactor = yearbuilt < 1950 ? 1.18 : yearbuilt < 1970 ? 1.09 : yearbuilt < 1990 ? 1.03 : 1.0;
-  const sizeFactor = sqft > 200000 ? 1.04 : sqft < 20000 ? 0.97 : 1.0;
-
-  const estIntensity = baseIntensity * tempFactor * dewFactor * ageFactor * sizeFactor;
-
-  const ratio = estIntensity / cap;
-  let risk, headline, desc, color;
-
-  if (ratio > 1.0) {
-    risk = 'high';
-    headline = 'High Risk — above the LL97 cap';
-    desc = `Your estimated GHG intensity exceeds the LL97 emission cap for ${type} buildings. You are liable for annual penalties unless capital improvements or carbon offset credits are implemented before the compliance period begins.`;
-  } else if (ratio > 0.80) {
-    risk = 'medium';
-    headline = 'Medium Risk — within 20% of the cap';
-    desc = `Your estimated GHG intensity is close to the LL97 cap for ${type} buildings. Minor increases in occupancy or energy use may push you above the threshold. Early planning for retrofits is strongly recommended.`;
-  } else {
-    risk = 'low';
-    headline = 'Low Risk — comfortably below the cap';
-    desc = `Your estimated GHG intensity is more than 20% below the LL97 cap for ${type} buildings. You are currently in a safe compliance position for 2024–2029, but monitoring future use patterns is advisable.`;
+  if (age > 40) {
+    recs.push({
+      icon: '🏗️',
+      title: 'Envelope upgrade',
+      desc: 'Window replacement, insulation, air sealing. Reduces heating/cooling load by 20–40%.',
+      impact: '~25% emission reduction',
+    });
   }
-
-  const riskCard = document.getElementById('riskCard');
-  riskCard.className = 'risk-card ' + risk;
-  document.getElementById('riskLabel').textContent = risk === 'high' ? 'High Risk' : risk === 'medium' ? 'Medium Risk' : 'Low Risk';
-  document.getElementById('riskHeadline').textContent = headline;
-  document.getElementById('riskDesc').textContent = desc;
-
-  document.getElementById('metricIntensity').textContent = estIntensity.toFixed(5);
-  document.getElementById('metricCap').textContent = cap.toFixed(5);
-
-  const delta = estIntensity - cap;
-  const deltaEl = document.getElementById('metricDelta');
-  deltaEl.textContent = (delta >= 0 ? '+' : '') + delta.toFixed(5);
-  deltaEl.style.color = delta > 0 ? '#E24B4A' : delta > -0.001 ? '#BA7517' : '#639922';
-  document.getElementById('metricDeltaLabel').textContent = delta > 0 ? 'above cap' : 'below cap';
-
-  const pct = Math.min(ratio * 80, 100);
-  const capPct = 80;
-  document.getElementById('barFill').style.width = pct + '%';
-  document.getElementById('barFill').style.background = risk === 'high' ? '#D85A30' : risk === 'medium' ? '#EF9F27' : '#639922';
-  document.getElementById('barCap').style.left = capPct + '%';
-  document.getElementById('barCapLabel').textContent = 'LL97 cap (' + cap.toFixed(5) + ')';
-
-  let penalty = 0;
-  if (estIntensity > cap) {
-    const excessTons = (estIntensity - cap) * sqft;
-    penalty = excessTons * 268;
+  if (payload.annual_gas_kWh && payload.annual_gas_kWh > 0) {
+    recs.push({
+      icon: '⚡',
+      title: 'Electrify heating',
+      desc: 'Replace gas boilers with air-source or ground-source heat pumps. NYC grid is decarbonizing.',
+      impact: '~40% emission reduction',
+    });
   }
+  recs.push({
+    icon: '🔍',
+    title: 'Submeter and benchmark',
+    desc: 'Install sub-metering to identify high-consumption zones. Required for Energy Star compliance anyway.',
+    impact: '5–15% via behavior change',
+  });
+  if (risk === 'high') {
+    recs.push({
+      icon: '💸',
+      title: 'GHG offset credits',
+      desc: 'Short-term bridge for compliance years. Not a substitute for physical retrofits.',
+      impact: 'Caps penalty at credit price',
+    });
+  }
+  recs.push({
+    icon: '☀️',
+    title: 'Rooftop solar',
+    desc: 'On-site generation directly offsets grid electricity. Eligible for NYC property tax abatement.',
+    impact: '~10% emission reduction',
+  });
 
-  const penaltyBox = document.getElementById('penaltyBox');
-  penaltyBox.className = 'penalty-box' + (penalty > 0 ? ' has-penalty' : '');
-  document.getElementById('penaltyValue').textContent = penalty > 0
-    ? '$' + Math.round(penalty).toLocaleString() + '/yr'
-    : '$0 / yr';
-  document.getElementById('penaltyNote').textContent = penalty > 0
-    ? 'Based on $268/tCO₂e fine rate × ' + Math.round((estIntensity - cap) * sqft) + ' excess tCO₂e'
-    : 'No penalty liability in the 2024–2029 period under current estimate.';
-
-  document.getElementById('disclaimerText').innerHTML =
-    'This is a pre-screening estimate based on the BDG2 dataset and a neural-network–trained model. Results use dataset-average parameters where inputs were not provided. Actual compliance liability depends on verified energy audit data. Consult a qualified energy engineer before making capital decisions. LL97 fine rate: $268/tCO₂e above the cap.';
-
-  document.getElementById('resultPanel').classList.add('visible');
-  document.getElementById('resultPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const container = document.getElementById('recsContainer');
+  container.innerHTML = recs.map(r => `
+    <div class="rec-card">
+      <div class="rec-icon" style="font-size: 20px;">${r.icon}</div>
+      <div class="rec-title">${r.title}</div>
+      <div class="rec-desc">${r.desc}</div>
+      <div class="rec-impact">${r.impact}</div>
+    </div>
+  `).join('');
 }
 
 function resetForm() {
-  ['sqft','yearbuilt','airTempWinter','airTempSummer','dewTempWinter','dewTempSummer'].forEach(id => {
-    const el = document.getElementById(id);
-    el.value = '';
-    el.classList.remove('auto-filled');
-    autoFilled[id] = false;
-    const note = document.getElementById(id + '-note');
-    if (note) { note.textContent = ''; note.className = 'field-sub'; }
-  });
-  document.getElementById('resultPanel').classList.remove('visible');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  ['sqft','yearbuilt','floors','airTempWinter','airTempSummer','dewTempWinter','dewTempSummer','elec','gas','steam','energyStar']
+    .forEach(id => {
+      const el = document.getElementById(id);
+      if (el) { el.value = ''; el.classList.remove('auto-filled'); }
+    });
+  document.getElementById('results').classList.remove('visible');
+  applyDefaults();
+  document.getElementById('screener').scrollIntoView({ behavior: 'smooth' });
 }
 </script>
+</body>
+</html>
