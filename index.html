@@ -9,752 +9,202 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
-/* ===========================================================
-   DESIGN TOKENS
-   =========================================================== */
 :root {
-  --bg: #FAFAF7;
-  --surface: #FFFFFF;
-  --surface-2: #F4F3EE;
-  --ink: #0A0A0A;
-  --ink-2: #3A3A37;
-  --ink-3: #6B6B66;
-  --border: rgba(10,10,10,0.08);
-  --border-strong: rgba(10,10,10,0.14);
-  --accent: #1A1A1A;
-  --green: #2F7D3E;
-  --green-bg: #EAF5ED;
-  --green-border: #B8DAC0;
-  --amber: #B5641C;
-  --amber-bg: #FCEFDC;
-  --amber-border: #F0C988;
-  --red: #B0342E;
-  --red-bg: #FBE8E5;
-  --red-border: #F0A89F;
-  --blue: #1E5FA5;
-  --blue-bg: #E8EFF7;
-  --radius-sm: 8px;
-  --radius: 14px;
-  --radius-lg: 20px;
-  --shadow-sm: 0 1px 2px rgba(10,10,10,0.04);
+  --bg: #FAFAF7; --surface: #FFFFFF; --surface-2: #F4F3EE;
+  --ink: #0A0A0A; --ink-2: #3A3A37; --ink-3: #6B6B66;
+  --border: rgba(10,10,10,0.08); --border-strong: rgba(10,10,10,0.14);
+  --green: #2F7D3E; --green-bg: #EAF5ED; --green-border: #B8DAC0;
+  --amber: #B5641C; --amber-bg: #FCEFDC; --amber-border: #F0C988;
+  --red: #B0342E; --red-bg: #FBE8E5; --red-border: #F0A89F;
+  --blue: #1E5FA5; --blue-bg: #E8EFF7;
+  --radius-sm: 8px; --radius: 14px; --radius-lg: 20px;
   --shadow: 0 4px 16px rgba(10,10,10,0.06);
 }
-
-/* ===========================================================
-   RESET & BASE
-   =========================================================== */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-  background: var(--bg);
-  color: var(--ink);
-  line-height: 1.55;
-  font-size: 17px;
+  background: var(--bg); color: var(--ink); line-height: 1.55; font-size: 17px;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-feature-settings: 'ss01', 'cv11';
 }
 button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
 input, select { font-family: inherit; color: inherit; }
 a { color: inherit; text-decoration: none; }
 .mono { font-family: 'JetBrains Mono', 'SF Mono', Consolas, monospace; font-feature-settings: 'tnum'; }
+.container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
 
-/* ===========================================================
-   LAYOUT
-   =========================================================== */
-.container {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-
-/* ===========================================================
-   NAV
-   =========================================================== */
 .nav {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  background: rgba(250,250,247,0.85);
-  backdrop-filter: saturate(180%) blur(14px);
-  -webkit-backdrop-filter: saturate(180%) blur(14px);
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(250,250,247,0.85); backdrop-filter: saturate(180%) blur(14px);
   border-bottom: 1px solid var(--border);
 }
-.nav-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 64px;
-}
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-weight: 600;
-  font-size: 17px;
-  letter-spacing: -0.01em;
-}
-.brand-mark {
-  width: 28px; height: 28px;
-  border-radius: 7px;
-  background: var(--ink);
-  display: grid; place-items: center;
-  color: white;
-  font-weight: 700;
-  font-size: 13px;
-  letter-spacing: -0.02em;
-}
-.nav-links {
-  display: flex; gap: 32px;
-  font-size: 15px;
-  color: var(--ink-2);
-}
+.nav-inner { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 17px; letter-spacing: -0.01em; }
+.brand-mark { width: 28px; height: 28px; border-radius: 7px; background: var(--ink); display: grid; place-items: center; color: white; font-weight: 700; font-size: 13px; }
+.nav-links { display: flex; gap: 32px; font-size: 15px; color: var(--ink-2); }
 .nav-links a:hover { color: var(--ink); }
-.nav-cta {
-  background: var(--ink);
-  color: white;
-  padding: 9px 18px;
-  border-radius: 999px;
-  font-size: 14px;
-  font-weight: 500;
-  transition: transform 0.15s, opacity 0.15s;
-}
-.nav-cta:hover { transform: translateY(-1px); opacity: 0.9; }
-@media (max-width: 720px) {
-  .nav-links { display: none; }
-}
+.nav-cta { background: var(--ink); color: white; padding: 9px 18px; border-radius: 999px; font-size: 14px; font-weight: 500; transition: opacity 0.15s; }
+.nav-cta:hover { opacity: 0.85; }
+@media (max-width: 720px) { .nav-links { display: none; } }
 
-/* ===========================================================
-   HERO
-   =========================================================== */
-.hero {
-  padding: 88px 0 72px;
-  text-align: center;
-  position: relative;
-}
-.hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 6px 14px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--ink-2);
-  margin-bottom: 28px;
-}
-.hero-badge-dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--green); display: inline-block;
-  animation: pulse 2s infinite;
-}
-@keyframes pulse {
-  0%, 100% { opacity: 1; } 50% { opacity: 0.4; }
-}
-.hero h1 {
-  font-size: clamp(42px, 6vw, 72px);
-  font-weight: 700;
-  letter-spacing: -0.035em;
-  line-height: 1.02;
-  margin-bottom: 24px;
-  color: var(--ink);
-}
-.hero h1 .accent {
-  font-style: italic;
-  font-weight: 300;
-  letter-spacing: -0.03em;
-}
-.hero p.sub {
-  font-size: clamp(17px, 2vw, 20px);
-  color: var(--ink-3);
-  max-width: 580px;
-  margin: 0 auto 40px;
-  line-height: 1.55;
-}
-.hero-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background: var(--ink);
-  color: white;
-  padding: 16px 28px;
-  border-radius: 999px;
-  font-size: 16px;
-  font-weight: 500;
-  transition: transform 0.15s, box-shadow 0.15s;
-  box-shadow: 0 4px 20px rgba(10,10,10,0.15);
-}
+.hero { padding: 88px 0 72px; text-align: center; }
+.hero-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 6px 14px; font-size: 13px; font-weight: 500; color: var(--ink-2); margin-bottom: 28px; }
+.hero-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); display: inline-block; animation: pulse 2s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+.hero h1 { font-size: clamp(42px, 6vw, 72px); font-weight: 700; letter-spacing: -0.035em; line-height: 1.02; margin-bottom: 24px; }
+.hero h1 .accent { font-style: italic; font-weight: 300; letter-spacing: -0.03em; }
+.hero p.sub { font-size: clamp(17px, 2vw, 20px); color: var(--ink-3); max-width: 580px; margin: 0 auto 40px; }
+.hero-cta { display: inline-flex; align-items: center; gap: 10px; background: var(--ink); color: white; padding: 16px 28px; border-radius: 999px; font-size: 16px; font-weight: 500; transition: transform 0.15s, box-shadow 0.15s; box-shadow: 0 4px 20px rgba(10,10,10,0.15); }
 .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(10,10,10,0.2); }
 
-.hero-stats {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0;
-  max-width: 480px;
-  margin: 64px auto 0;
-  border-top: 1px solid var(--border);
-  padding-top: 40px;
-}
-.hero-stat {
-  text-align: center;
-  padding: 0 16px;
-  border-right: 1px solid var(--border);
-}
+.hero-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; max-width: 720px; margin: 64px auto 0; border-top: 1px solid var(--border); padding-top: 40px; }
+.hero-stat { text-align: center; padding: 0 16px; border-right: 1px solid var(--border); }
 .hero-stat:last-child { border-right: none; }
-.hero-stat-val {
-  font-size: 32px;
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  color: var(--ink);
-  margin-bottom: 4px;
-}
-.hero-stat-label {
-  font-size: 13px;
-  color: var(--ink-3);
-  letter-spacing: 0.02em;
-}
+.hero-stat-val { font-size: 32px; font-weight: 600; letter-spacing: -0.03em; margin-bottom: 4px; }
+.hero-stat-label { font-size: 13px; color: var(--ink-3); }
 
-/* ===========================================================
-   SECTION
-   =========================================================== */
+/* Model card section */
+.model-section { padding: 32px 0; }
+.model-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 36px; box-shadow: var(--shadow); }
+.model-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: center; }
+@media (max-width: 720px) { .model-grid { grid-template-columns: 1fr; gap: 24px; } }
+.model-tag { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--blue); background: var(--blue-bg); padding: 5px 11px; border-radius: 999px; margin-bottom: 14px; }
+.model-title { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 10px; }
+.model-desc { font-size: 15px; color: var(--ink-3); line-height: 1.6; }
+.metric-strip { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.metric-tile { background: var(--surface-2); border-radius: var(--radius-sm); padding: 16px 18px; }
+.metric-tile-label { font-size: 11px; font-weight: 600; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+.metric-tile-val { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.1; }
+.metric-tile-sub { font-size: 12px; color: var(--ink-3); margin-top: 4px; }
+.metric-tile-val.highlight { color: var(--green); }
+
 section { padding: 64px 0; }
-.section-label {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--ink-3);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  margin-bottom: 12px;
-}
-.section-title {
-  font-size: clamp(28px, 4vw, 40px);
-  font-weight: 600;
-  letter-spacing: -0.025em;
-  line-height: 1.15;
-  margin-bottom: 12px;
-}
-.section-desc {
-  font-size: 18px;
-  color: var(--ink-3);
-  max-width: 580px;
-  line-height: 1.55;
-}
+.section-label { font-size: 13px; font-weight: 600; color: var(--ink-3); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px; }
+.section-title { font-size: clamp(28px, 4vw, 40px); font-weight: 600; letter-spacing: -0.025em; line-height: 1.15; margin-bottom: 12px; }
+.section-desc { font-size: 18px; color: var(--ink-3); max-width: 580px; line-height: 1.55; }
 
-/* ===========================================================
-   FORM
-   =========================================================== */
-.form-wrap {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 40px;
-  box-shadow: var(--shadow);
-}
-@media (max-width: 720px) {
-  .form-wrap { padding: 24px; border-radius: var(--radius); }
-}
+.how-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px; }
+@media (max-width: 800px) { .how-grid { grid-template-columns: 1fr; } }
+.how-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; }
+.how-num { font-size: 13px; font-weight: 600; color: var(--ink-3); letter-spacing: 0.1em; margin-bottom: 16px; }
+.how-title { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 10px; }
+.how-desc { font-size: 15px; color: var(--ink-3); line-height: 1.55; }
 
-.form-group {
-  margin-bottom: 40px;
-}
+.form-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 40px; box-shadow: var(--shadow); }
+@media (max-width: 720px) { .form-wrap { padding: 24px; border-radius: var(--radius); } }
+
+.form-group { margin-bottom: 40px; }
 .form-group:last-child { margin-bottom: 0; }
-.form-group-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 20px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid var(--border);
-}
-.form-group-icon {
-  width: 36px; height: 36px;
-  border-radius: 10px;
-  background: var(--surface-2);
-  display: grid; place-items: center;
-  flex-shrink: 0;
-}
-.form-group-title {
-  font-size: 20px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  margin-bottom: 2px;
-}
-.form-group-sub {
-  font-size: 14px;
-  color: var(--ink-3);
-}
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-}
-@media (max-width: 640px) {
-  .form-grid { grid-template-columns: 1fr; }
-}
+.form-group-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+.form-group-icon { width: 36px; height: 36px; border-radius: 10px; background: var(--surface-2); display: grid; place-items: center; flex-shrink: 0; }
+.form-group-title { font-size: 20px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 2px; }
+.form-group-sub { font-size: 14px; color: var(--ink-3); }
+.form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+@media (max-width: 640px) { .form-grid { grid-template-columns: 1fr; } }
 
 .field { display: flex; flex-direction: column; gap: 8px; }
-.field-label {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--ink);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.field-opt {
-  font-size: 12px;
-  color: var(--ink-3);
-  font-weight: 400;
-  background: var(--surface-2);
-  padding: 2px 8px;
-  border-radius: 999px;
-}
-.field-input, .field-select {
-  width: 100%;
-  height: 48px;
-  background: var(--surface);
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-sm);
-  padding: 0 14px;
-  font-size: 16px;
-  font-weight: 400;
-  color: var(--ink);
-  transition: border-color 0.15s, box-shadow 0.15s;
-  outline: none;
-}
-.field-input:focus, .field-select:focus {
-  border-color: var(--ink);
-  box-shadow: 0 0 0 3px rgba(10,10,10,0.08);
-}
-.field-input.auto-filled {
-  background: #FAFAF7;
-  color: var(--ink-3);
-  font-style: italic;
-}
-.field-input::placeholder { color: var(--ink-3); opacity: 0.6; }
-.field-hint {
-  font-size: 12px;
-  color: var(--ink-3);
-  min-height: 14px;
-}
+.field-label { font-size: 14px; font-weight: 500; display: flex; align-items: center; justify-content: space-between; }
+.field-opt { font-size: 12px; color: var(--ink-3); font-weight: 400; background: var(--surface-2); padding: 2px 8px; border-radius: 999px; }
+.field-input, .field-select { width: 100%; height: 48px; background: var(--surface); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 0 14px; font-size: 16px; transition: border-color 0.15s, box-shadow 0.15s; outline: none; }
+.field-input:focus, .field-select:focus { border-color: var(--ink); box-shadow: 0 0 0 3px rgba(10,10,10,0.08); }
+.field-input.auto-filled { background: #FAFAF7; color: var(--ink-3); font-style: italic; }
+.field-hint { font-size: 12px; color: var(--ink-3); min-height: 14px; }
 .field-hint.active { color: var(--blue); }
 
-.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
-.toggle {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 16px;
-  background: var(--surface-2);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  transition: background 0.15s;
-  user-select: none;
-}
+.toggle { display: flex; align-items: center; gap: 12px; padding: 16px; background: var(--surface-2); border-radius: var(--radius-sm); cursor: pointer; transition: background 0.15s; user-select: none; }
 .toggle:hover { background: #ECEBE5; }
-.toggle-switch {
-  width: 40px; height: 24px;
-  background: #CFCFC8;
-  border-radius: 999px;
-  position: relative;
-  transition: background 0.2s;
-  flex-shrink: 0;
-}
-.toggle-switch::after {
-  content: ''; position: absolute;
-  top: 3px; left: 3px;
-  width: 18px; height: 18px;
-  background: white;
-  border-radius: 50%;
-  transition: transform 0.2s;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-}
+.toggle-switch { width: 40px; height: 24px; background: #CFCFC8; border-radius: 999px; position: relative; transition: background 0.2s; flex-shrink: 0; }
+.toggle-switch::after { content: ''; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; background: white; border-radius: 50%; transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
 .toggle.active .toggle-switch { background: var(--ink); }
 .toggle.active .toggle-switch::after { transform: translateX(16px); }
 .toggle-content { flex: 1; }
 .toggle-title { font-size: 15px; font-weight: 500; margin-bottom: 2px; }
 .toggle-desc { font-size: 13px; color: var(--ink-3); }
+.advanced-panel { overflow: hidden; max-height: 0; transition: max-height 0.3s ease, margin-top 0.3s ease; margin-top: 0; }
+.advanced-panel.open { max-height: 1000px; margin-top: 20px; }
 
-.advanced-panel {
-  overflow: hidden;
-  max-height: 0;
-  transition: max-height 0.3s ease, margin-top 0.3s ease;
-  margin-top: 0;
-}
-.advanced-panel.open {
-  max-height: 1000px;
-  margin-top: 20px;
-}
-
-.submit-btn {
-  width: 100%;
-  height: 64px;
-  background: var(--ink);
-  color: white;
-  border-radius: var(--radius-sm);
-  font-size: 18px;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  transition: transform 0.15s, opacity 0.15s;
-  margin-top: 8px;
-}
+.submit-btn { width: 100%; height: 64px; background: var(--ink); color: white; border-radius: var(--radius-sm); font-size: 18px; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 10px; transition: transform 0.15s, opacity 0.15s; margin-top: 8px; }
 .submit-btn:hover { transform: translateY(-1px); opacity: 0.92; }
-.submit-btn:active { transform: translateY(0); }
 .submit-btn:disabled { opacity: 0.5; cursor: wait; transform: none; }
-.submit-loader {
-  width: 18px; height: 18px;
-  border: 2px solid rgba(255,255,255,0.3);
-  border-top-color: white;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-  display: none;
-}
+.submit-loader { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.8s linear infinite; display: none; }
 .submit-btn.loading .submit-loader { display: block; }
 .submit-btn.loading .submit-text { display: none; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ===========================================================
-   RESULTS
-   =========================================================== */
 #results { display: none; animation: fadeUp 0.5s ease; }
 #results.visible { display: block; }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
-.result-hero {
-  padding: 56px 48px;
-  border-radius: var(--radius-lg);
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-  margin-bottom: 32px;
-}
-@media (max-width: 640px) {
-  .result-hero { padding: 40px 24px; }
-}
-.result-hero.low    { background: var(--green-bg); border: 1px solid var(--green-border); }
+.result-hero { padding: 56px 48px; border-radius: var(--radius-lg); text-align: center; overflow: hidden; margin-bottom: 32px; }
+@media (max-width: 640px) { .result-hero { padding: 40px 24px; } }
+.result-hero.low { background: var(--green-bg); border: 1px solid var(--green-border); }
 .result-hero.medium { background: var(--amber-bg); border: 1px solid var(--amber-border); }
-.result-hero.high   { background: var(--red-bg);   border: 1px solid var(--red-border); }
-
-.result-face {
-  font-size: 72px;
-  margin-bottom: 16px;
-  line-height: 1;
-  display: inline-block;
-  animation: bounce 0.6s ease;
-}
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-12px); }
-}
-.result-label {
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  margin-bottom: 12px;
-}
-.result-hero.low    .result-label { color: var(--green); }
+.result-hero.high { background: var(--red-bg); border: 1px solid var(--red-border); }
+.result-face { font-size: 72px; margin-bottom: 16px; line-height: 1; display: inline-block; animation: bounce 0.6s ease; }
+@keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+.result-label { font-size: 14px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 12px; }
+.result-hero.low .result-label { color: var(--green); }
 .result-hero.medium .result-label { color: var(--amber); }
-.result-hero.high   .result-label { color: var(--red); }
-
-.result-title {
-  font-size: clamp(36px, 5vw, 56px);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 1.05;
-  margin-bottom: 16px;
-}
-.result-hero.low    .result-title { color: #184A23; }
+.result-hero.high .result-label { color: var(--red); }
+.result-title { font-size: clamp(36px, 5vw, 56px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 16px; }
+.result-hero.low .result-title { color: #184A23; }
 .result-hero.medium .result-title { color: #5A3008; }
-.result-hero.high   .result-title { color: #5C1915; }
-
-.result-desc {
-  font-size: 18px;
-  max-width: 520px;
-  margin: 0 auto 28px;
-  line-height: 1.55;
-}
-.result-hero.low    .result-desc { color: #2F5D38; }
+.result-hero.high .result-title { color: #5C1915; }
+.result-desc { font-size: 18px; max-width: 520px; margin: 0 auto 28px; line-height: 1.55; }
+.result-hero.low .result-desc { color: #2F5D38; }
 .result-hero.medium .result-desc { color: #7A4813; }
-.result-hero.high   .result-desc { color: #7B2923; }
+.result-hero.high .result-desc { color: #7B2923; }
+.confidence-bar { display: inline-flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.6); padding: 8px 16px; border-radius: 999px; font-size: 13px; font-weight: 500; }
+.confidence-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ink); }
 
-.confidence-bar {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background: rgba(255,255,255,0.6);
-  padding: 8px 16px;
-  border-radius: 999px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--ink-2);
-}
-.confidence-dot {
-  width: 8px; height: 8px; border-radius: 50%;
-  background: var(--ink);
-}
+.proba-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 32px; }
+@media (max-width: 480px) { .proba-row { grid-template-columns: 1fr; } }
+.proba-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; }
+.proba-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; color: var(--ink-3); }
+.proba-bar-wrap { height: 6px; background: var(--surface-2); border-radius: 999px; overflow: hidden; margin-bottom: 8px; }
+.proba-bar { height: 100%; border-radius: 999px; transition: width 0.6s ease; }
+.proba-bar.high { background: var(--red); } .proba-bar.medium { background: var(--amber); } .proba-bar.low { background: var(--green); }
+.proba-val { font-size: 18px; font-weight: 600; letter-spacing: -0.02em; }
 
-/* Metric cards */
-.metrics {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  margin-bottom: 32px;
-}
+.metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
 @media (max-width: 900px) { .metrics { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 480px) { .metrics { grid-template-columns: 1fr; } }
+.metric { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px 20px; }
+.metric-label { font-size: 12px; font-weight: 600; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+.metric-val { font-size: 28px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 4px; }
+.metric-sub { font-size: 13px; color: var(--ink-3); }
+.metric-val.red { color: var(--red); } .metric-val.amber { color: var(--amber); } .metric-val.green { color: var(--green); }
 
-.metric {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 24px 20px;
-  transition: border-color 0.15s;
-}
-.metric:hover { border-color: var(--border-strong); }
-.metric-label {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--ink-3);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 10px;
-}
-.metric-val {
-  font-size: 28px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-  margin-bottom: 4px;
-}
-.metric-sub {
-  font-size: 13px;
-  color: var(--ink-3);
-}
-.metric-val.red    { color: var(--red); }
-.metric-val.amber  { color: var(--amber); }
-.metric-val.green  { color: var(--green); }
-
-/* Panel cards */
-.panel {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 32px;
-  margin-bottom: 24px;
-}
+.panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 32px; margin-bottom: 24px; }
 @media (max-width: 640px) { .panel { padding: 24px; border-radius: var(--radius); } }
-.panel-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 24px;
-}
-.panel-title {
-  font-size: 22px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-}
-.panel-sub {
-  font-size: 14px;
-  color: var(--ink-3);
-  margin-top: 4px;
-}
+.panel-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+.panel-title { font-size: 22px; font-weight: 600; letter-spacing: -0.02em; }
+.panel-sub { font-size: 14px; color: var(--ink-3); margin-top: 4px; }
 
-/* Penalty timeline */
-.timeline-period {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin-top: 24px;
-}
-@media (max-width: 640px) { .timeline-period { grid-template-columns: 1fr; } }
-.period-card {
-  background: var(--surface-2);
-  border-radius: var(--radius-sm);
-  padding: 20px;
-  border-left: 3px solid var(--border-strong);
-}
-.period-card.active { border-left-color: var(--red); background: #FFF5F4; }
-.period-year {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--ink-3);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  margin-bottom: 6px;
-}
-.period-cap {
-  font-size: 14px;
-  color: var(--ink-2);
-  margin-bottom: 12px;
-}
-.period-penalty {
-  font-size: 24px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  color: var(--ink);
-}
-.period-penalty.red { color: var(--red); }
-.period-penalty.green { color: var(--green); }
+.upgrade-cta { background: var(--blue-bg); border: 1px solid #B8CFEA; border-radius: var(--radius); padding: 24px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+@media (max-width: 640px) { .upgrade-cta { flex-direction: column; align-items: flex-start; } }
+.upgrade-text { flex: 1; }
+.upgrade-title { font-size: 16px; font-weight: 600; color: #0E3F76; margin-bottom: 4px; }
+.upgrade-desc { font-size: 14px; color: #1E5FA5; line-height: 1.5; }
+.upgrade-btn { background: var(--blue); color: white; padding: 10px 18px; border-radius: 999px; font-size: 14px; font-weight: 500; transition: opacity 0.15s; flex-shrink: 0; }
+.upgrade-btn:hover { opacity: 0.9; }
 
-/* Drivers */
-.drivers {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-.driver {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-.driver-label {
-  font-size: 15px;
-  font-weight: 500;
-  min-width: 170px;
-}
-.driver-bar-wrap {
-  flex: 1;
-  height: 10px;
-  background: var(--surface-2);
-  border-radius: 999px;
-  overflow: hidden;
-}
-.driver-bar {
-  height: 100%;
-  border-radius: 999px;
-  transition: width 0.8s cubic-bezier(0.22,1,0.36,1);
-}
-.driver-pct {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--ink-3);
-  min-width: 40px;
-  text-align: right;
-}
-
-/* Recommendations */
-.recs {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 16px;
-}
-.rec-card {
-  background: var(--surface-2);
-  border-radius: var(--radius);
-  padding: 20px;
-  border: 1px solid transparent;
-  transition: all 0.15s;
-}
+.recs { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.rec-card { background: var(--surface-2); border-radius: var(--radius); padding: 20px; transition: all 0.15s; border: 1px solid transparent; }
 .rec-card:hover { border-color: var(--border-strong); transform: translateY(-2px); }
-.rec-icon {
-  width: 40px; height: 40px;
-  border-radius: 10px;
-  background: var(--surface);
-  display: grid; place-items: center;
-  margin-bottom: 14px;
-}
-.rec-title {
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 6px;
-}
-.rec-desc {
-  font-size: 14px;
-  color: var(--ink-3);
-  line-height: 1.5;
-  margin-bottom: 12px;
-}
-.rec-impact {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--green);
-}
+.rec-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--surface); display: grid; place-items: center; margin-bottom: 14px; font-size: 20px; }
+.rec-title { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+.rec-desc { font-size: 14px; color: var(--ink-3); line-height: 1.5; margin-bottom: 12px; }
+.rec-impact { font-size: 13px; font-weight: 500; color: var(--green); }
 
-.reset-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--ink-3);
-  font-size: 14px;
-  margin-top: 24px;
-  padding: 10px 0;
-}
+.reset-btn { display: inline-flex; align-items: center; gap: 8px; color: var(--ink-3); font-size: 14px; margin-top: 24px; padding: 10px 0; }
 .reset-btn:hover { color: var(--ink); }
 
-/* Footer */
-.footer {
-  padding: 48px 0 64px;
-  border-top: 1px solid var(--border);
-  text-align: center;
-  color: var(--ink-3);
-  font-size: 14px;
-  line-height: 1.7;
-}
-.footer a { color: var(--ink-2); border-bottom: 1px solid var(--border-strong); }
-
-/* How it works */
-.how-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  margin-top: 48px;
-}
-@media (max-width: 800px) { .how-grid { grid-template-columns: 1fr; } }
-.how-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 28px;
-}
-.how-num {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--ink-3);
-  letter-spacing: 0.1em;
-  margin-bottom: 16px;
-}
-.how-title {
-  font-size: 20px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  margin-bottom: 10px;
-}
-.how-desc {
-  font-size: 15px;
-  color: var(--ink-3);
-  line-height: 1.55;
-}
-
-/* Chart container */
-.chart-wrap {
-  position: relative;
-  height: 280px;
-  width: 100%;
-  margin-top: 16px;
-}
-
-/* Error banner */
-.error-banner {
-  background: var(--red-bg);
-  border: 1px solid var(--red-border);
-  color: #5C1915;
-  padding: 16px 20px;
-  border-radius: var(--radius-sm);
-  margin-bottom: 20px;
-  font-size: 14px;
-  display: none;
-}
+.error-banner { background: var(--red-bg); border: 1px solid var(--red-border); color: #5C1915; padding: 16px 20px; border-radius: var(--radius-sm); margin-bottom: 20px; font-size: 14px; display: none; }
 .error-banner.visible { display: block; }
+
+.footer { padding: 48px 0 64px; border-top: 1px solid var(--border); text-align: center; color: var(--ink-3); font-size: 14px; line-height: 1.7; }
+.footer a { color: var(--ink-2); border-bottom: 1px solid var(--border-strong); }
 </style>
 </head>
 <body>
@@ -768,8 +218,8 @@ section { padding: 64px 0; }
     </a>
     <div class="nav-links">
       <a href="#how-it-works">How it works</a>
+      <a href="#model">Model</a>
       <a href="#screener">Run screening</a>
-      <a href="#about">About</a>
     </div>
     <a href="#screener" class="nav-cta">Get started</a>
   </div>
@@ -780,7 +230,7 @@ section { padding: 64px 0; }
   <div class="container">
     <div class="hero-badge">
       <span class="hero-badge-dot"></span>
-      Neural network trained on 1,593 buildings
+      Trained on 1,593 buildings · 97% high-risk recall
     </div>
     <h1>Will your building<br /><span class="accent">survive LL97?</span></h1>
     <p class="sub">Estimate your carbon risk, compliance cost, and retrofit strategy in seconds. Built for owners, asset managers, and ESG officers.</p>
@@ -790,6 +240,10 @@ section { padding: 64px 0; }
     </a>
 
     <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-val mono">97%</div>
+        <div class="hero-stat-label">High-risk recall</div>
+      </div>
       <div class="hero-stat">
         <div class="hero-stat-val mono">$268</div>
         <div class="hero-stat-label">Per tCO₂e fine</div>
@@ -802,44 +256,81 @@ section { padding: 64px 0; }
   </div>
 </header>
 
-<!-- HOW IT WORKS -->
-<section id="how-it-works">
+<!-- MODEL CARD -->
+<section class="model-section" id="model">
   <div class="container">
-    <div class="section-label">How it works</div>
-    <h2 class="section-title">Three steps to your risk score.</h2>
-    <p class="section-desc">Built on the Building Data Genome Project 2 (BDG2), a dataset of anonymized energy and weather records from buildings worldwide.</p>
-
-    <div class="how-grid">
-      <div class="how-card">
-        <div class="how-num mono">01 — CHOOSE PATH</div>
-        <div class="how-title">Bills or profile?</div>
-        <div class="how-desc">If you have 12 months of utility bills, we compute emissions exactly. If not, our neural network predicts from building features and climate.</div>
-      </div>
-      <div class="how-card">
-        <div class="how-num mono">02 — CLASSIFY</div>
-        <div class="how-title">LL97 risk level</div>
-        <div class="how-desc">High — above the cap. Medium — within 20% below. Low — more than 20% below. Classification follows LL97's official thresholds.</div>
-      </div>
-      <div class="how-card">
-        <div class="how-num mono">03 — PLAN</div>
-        <div class="how-title">See your exposure</div>
-        <div class="how-desc">Penalty estimates for 2024–2029 and 2030–2034 compliance periods, plus prioritized retrofit recommendations.</div>
+    <div class="model-card">
+      <div class="model-grid">
+        <div>
+          <span class="model-tag">The model</span>
+          <h2 class="model-title">XGBoost classifier with asymmetric thresholds</h2>
+          <p class="model-desc">We trained a gradient-boosted decision tree ensemble on 1,593 anonymized buildings from the <a href="https://github.com/buds-lab/building-data-genome-project-2" target="_blank" rel="noopener" style="color: var(--blue); border-bottom: 1px solid currentColor;">Building Data Genome Project 2</a>. SMOTE oversampling balanced the minority "medium" class, and decision thresholds were tuned to prioritize <strong>catching high-risk buildings</strong> over raw accuracy — because missing a real high-risk warning is the costly error.</p>
+        </div>
+        <div class="metric-strip">
+          <div class="metric-tile">
+            <div class="metric-tile-label">High recall</div>
+            <div class="metric-tile-val highlight">97.3%</div>
+            <div class="metric-tile-sub">Catches 97 of 100 high-risk buildings</div>
+          </div>
+          <div class="metric-tile">
+            <div class="metric-tile-label">Test accuracy</div>
+            <div class="metric-tile-val">62.4%</div>
+            <div class="metric-tile-sub">3-class problem, baseline 58%</div>
+          </div>
+          <div class="metric-tile">
+            <div class="metric-tile-label">Macro F1</div>
+            <div class="metric-tile-val">0.38</div>
+            <div class="metric-tile-sub">Balanced across classes</div>
+          </div>
+          <div class="metric-tile">
+            <div class="metric-tile-label">Training set</div>
+            <div class="metric-tile-val">1,593</div>
+            <div class="metric-tile-sub">Buildings, weighted by quality</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- SCREENER FORM -->
+<!-- HOW IT WORKS -->
+<section id="how-it-works">
+  <div class="container">
+    <div class="section-label">How it works</div>
+    <h2 class="section-title">Two paths to your risk score.</h2>
+    <p class="section-desc">The accuracy of your result depends on what data you can provide.</p>
+
+    <div class="how-grid">
+      <div class="how-card">
+        <div class="how-num mono">PATH A — WITH BILLS</div>
+        <div class="how-title">Direct calculation</div>
+        <div class="how-desc">If you have 12 months of utility bills, we compute emissions exactly using LL97's official emission factors. You get exact tCO₂e values and penalty estimates.</div>
+      </div>
+      <div class="how-card">
+        <div class="how-num mono">PATH B — NO BILLS</div>
+        <div class="how-title">ML classification</div>
+        <div class="how-desc">Without bills, our XGBoost classifier predicts your risk class from building features and climate. You get a class label and probability scores — but not exact emissions.</div>
+      </div>
+      <div class="how-card">
+        <div class="how-num mono">CLASSIFY</div>
+        <div class="how-title">LL97 risk levels</div>
+        <div class="how-desc">High — above the cap. Medium — within 20% below. Low — more than 20% below. Classification follows LL97's official thresholds.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCREENER -->
 <section id="screener">
   <div class="container">
     <div class="section-label">Run screening</div>
     <h2 class="section-title">Enter your building.</h2>
-    <p class="section-desc" style="margin-bottom: 48px;">Start by telling us whether you have utility bills. That single choice determines whether we calculate your emissions directly or predict them with our neural network.</p>
+    <p class="section-desc" style="margin-bottom: 48px;">Start by telling us whether you have utility bills. That single choice determines whether we calculate your emissions directly or predict them with our ML classifier.</p>
 
     <div class="form-wrap">
       <div id="errorBanner" class="error-banner"></div>
 
-      <!-- SECTION A: ENERGY (MOVED TO TOP) -->
+      <!-- ENERGY (top) -->
       <div class="form-group">
         <div class="form-group-header">
           <div class="form-group-icon">
@@ -847,18 +338,16 @@ section { padding: 64px 0; }
           </div>
           <div>
             <div class="form-group-title">Start here — do you have energy bills?</div>
-            <div class="form-group-sub">With bills, we calculate your exact emissions directly. Without, our neural network predicts from building features.</div>
+            <div class="form-group-sub">With bills, we calculate your exact emissions directly. Without, our ML classifier predicts the risk class.</div>
           </div>
         </div>
-
         <div class="toggle" id="energyToggle" onclick="toggleEnergy()">
           <div class="toggle-switch"></div>
           <div class="toggle-content">
             <div class="toggle-title">Yes, I have 12 months of utility bills</div>
-            <div class="toggle-desc">Direct calculation path — highest accuracy</div>
+            <div class="toggle-desc">Direct calculation path — exact emissions and penalty</div>
           </div>
         </div>
-
         <div class="advanced-panel" id="energyPanel">
           <div class="form-grid">
             <div class="field">
@@ -885,11 +374,11 @@ section { padding: 64px 0; }
         </div>
       </div>
 
-      <!-- SECTION B: BUILDING -->
+      <!-- BUILDING -->
       <div class="form-group">
         <div class="form-group-header">
           <div class="form-group-icon">
-            <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 17V7l7-4 7 4v10M3 17h14M7 17v-5h6v5M7 10h.01M10 10h.01M13 10h.01" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 17V7l7-4 7 4v10M3 17h14M7 17v-5h6v5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
           <div>
             <div class="form-group-title">Building profile</div>
@@ -911,7 +400,6 @@ section { padding: 64px 0; }
               <option value="Public services">Public Services</option>
               <option value="Other">Other</option>
             </select>
-            <div class="field-hint"></div>
           </div>
           <div class="field">
             <label class="field-label">Gross floor area <span style="color: var(--red);">*</span></label>
@@ -931,7 +419,7 @@ section { padding: 64px 0; }
         </div>
       </div>
 
-      <!-- SECTION C: CLIMATE -->
+      <!-- CLIMATE -->
       <div class="form-group">
         <div class="form-group-header">
           <div class="form-group-icon">
@@ -982,12 +470,32 @@ section { padding: 64px 0; }
         <div class="result-title" id="resultTitle">You're in the clear.</div>
         <div class="result-desc" id="resultDesc"></div>
         <div class="confidence-bar">
-          <span class="confidence-dot" id="confDot"></span>
-          <span id="confText">Model B · Screening estimate</span>
+          <span class="confidence-dot"></span>
+          <span id="confText">Direct calculation · Highest confidence</span>
         </div>
       </div>
 
-      <div class="metrics">
+      <!-- Probability cards (only for ML path) -->
+      <div class="proba-row" id="probaRow" style="display: none;">
+        <div class="proba-card">
+          <div class="proba-label">Probability — Low</div>
+          <div class="proba-bar-wrap"><div class="proba-bar low" id="probaLow" style="width: 0%"></div></div>
+          <div class="proba-val mono" id="probaLowVal">0%</div>
+        </div>
+        <div class="proba-card">
+          <div class="proba-label">Probability — Medium</div>
+          <div class="proba-bar-wrap"><div class="proba-bar medium" id="probaMed" style="width: 0%"></div></div>
+          <div class="proba-val mono" id="probaMedVal">0%</div>
+        </div>
+        <div class="proba-card">
+          <div class="proba-label">Probability — High</div>
+          <div class="proba-bar-wrap"><div class="proba-bar high" id="probaHigh" style="width: 0%"></div></div>
+          <div class="proba-val mono" id="probaHighVal">0%</div>
+        </div>
+      </div>
+
+      <!-- Metric cards (only for direct calc path) -->
+      <div class="metrics" id="metricsBlock" style="display: none;">
         <div class="metric">
           <div class="metric-label">Your GHG intensity</div>
           <div class="metric-val mono" id="mGhg">—</div>
@@ -1010,45 +518,13 @@ section { padding: 64px 0; }
         </div>
       </div>
 
-      <!-- Timeline -->
-      <div class="panel">
-        <div class="panel-head">
-          <div>
-            <div class="panel-title">Compliance timeline</div>
-            <div class="panel-sub">LL97 caps tighten in 2030 — what happens to your building?</div>
-          </div>
+      <!-- Upgrade CTA (only for ML path) -->
+      <div class="upgrade-cta" id="upgradeCta" style="display: none;">
+        <div class="upgrade-text">
+          <div class="upgrade-title">Want exact emissions and penalty estimates?</div>
+          <div class="upgrade-desc">Provide your annual utility bills and we'll calculate the precise tCO₂e and dollar exposure under LL97.</div>
         </div>
-        <div class="chart-wrap">
-          <canvas id="timelineChart" role="img" aria-label="Your emissions vs LL97 caps across 2024, 2030, and 2050"></canvas>
-        </div>
-        <div class="timeline-period">
-          <div class="period-card" id="period2024">
-            <div class="period-year">2024 – 2029</div>
-            <div class="period-cap" id="cap2024">Cap: —</div>
-            <div class="period-penalty" id="pen2024">—</div>
-          </div>
-          <div class="period-card" id="period2030">
-            <div class="period-year">2030 – 2034</div>
-            <div class="period-cap" id="cap2030">Cap: —</div>
-            <div class="period-penalty" id="pen2030">—</div>
-          </div>
-          <div class="period-card" id="period2050">
-            <div class="period-year">2050 target</div>
-            <div class="period-cap">Cap: near-zero</div>
-            <div class="period-penalty" id="pen2050">Full decarb</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Drivers -->
-      <div class="panel">
-        <div class="panel-head">
-          <div>
-            <div class="panel-title">Primary risk drivers</div>
-            <div class="panel-sub">What's contributing most to your risk score</div>
-          </div>
-        </div>
-        <div class="drivers" id="driversContainer"></div>
+        <button class="upgrade-btn" onclick="upgradeToEnergy()">Add energy bills</button>
       </div>
 
       <!-- Recommendations -->
@@ -1070,11 +546,11 @@ section { padding: 64px 0; }
   </div>
 </section>
 
-<!-- ABOUT / FOOTER -->
-<footer class="footer" id="about">
+<!-- FOOTER -->
+<footer class="footer">
   <div class="container">
     <p>
-      Built as a pre-compliance screening tool for NYC Local Law 97.<br />
+      Pre-compliance screening tool for NYC Local Law 97.<br />
       Model trained on the <a href="https://github.com/buds-lab/building-data-genome-project-2" target="_blank" rel="noopener">Building Data Genome Project 2</a>.
     </p>
     <p style="margin-top: 20px; font-size: 13px;">
@@ -1084,18 +560,13 @@ section { padding: 64px 0; }
 </footer>
 
 <script>
-// =============================================================
-// CONFIG
-// =============================================================
-const API_URL = 'https://ll97-api.onrender.com/predict'; // update after Render deploy
+// ===== CONFIG — update after Render deploy =====
+const API_URL = 'https://ll97-api.onrender.com/predict';
 
 const NYC_DEFAULTS = {
-  yearbuilt: 1967,
-  floors: 4,
-  airTempWinter: 6.5,
-  airTempSummer: 24.1,
-  dewTempWinter: 0.3,
-  dewTempSummer: 16.2,
+  yearbuilt: 1967, floors: 4,
+  airTempWinter: 6.5, airTempSummer: 24.1,
+  dewTempWinter: 0.3, dewTempSummer: 16.2,
 };
 
 const LL97_CAPS_2024 = {
@@ -1104,183 +575,41 @@ const LL97_CAPS_2024 = {
   'Entertainment/public assembly': 0.00765, 'Warehouse/storage': 0.00403,
   'Manufacturing/industrial': 0.01181, 'Public services': 0.00846, 'Other': 0.00846,
 };
-const LL97_CAPS_2030 = {
-  'Office': 0.00453, 'Education': 0.00344, 'Retail': 0.00403,
-  'Lodging/residential': 0.00407, 'Healthcare': 0.01193,
-  'Entertainment/public assembly': 0.00426, 'Warehouse/storage': 0.00110,
-  'Manufacturing/industrial': 0.00574, 'Public services': 0.00453, 'Other': 0.00453,
-};
-
-const ELEC_FACTOR  = 0.000288962; // tCO2e / kWh (2024-2029)
-const GAS_FACTOR   = 0.00005311;   // tCO2e / kWh (converted from 0.00531/therm ÷ 29.3)
+const ELEC_FACTOR  = 0.000288962;
+const GAS_FACTOR   = 0.00005311;
 const STEAM_FACTOR = 0.0000441;
-const OIL_FACTOR   = 0.00007421;   // tCO2e / kWh fuel oil no.2
-const PENALTY_PER_TON = 268;       // $ per tCO2e, LL97 official
+const OIL_FACTOR   = 0.00007421;
+const PENALTY_PER_TON = 268;
 
-// =============================================================
-// STATE
-// =============================================================
 let energyMode = false;
-let timelineChart = null;
 
-// =============================================================
-// UI HANDLERS
-// =============================================================
 function toggleEnergy() {
   energyMode = !energyMode;
   document.getElementById('energyToggle').classList.toggle('active', energyMode);
   document.getElementById('energyPanel').classList.toggle('open', energyMode);
 }
 
-// Auto-fill defaults when user leaves a field blank
 function applyDefaults() {
-  const map = {
-    yearbuilt: 'yearbuilt',
-    floors: 'floors',
-    airTempWinter: 'airTempWinter',
-    airTempSummer: 'airTempSummer',
-    dewTempWinter: 'dewTempWinter',
-    dewTempSummer: 'dewTempSummer',
-  };
-  for (const id in map) {
+  ['yearbuilt','floors','airTempWinter','airTempSummer','dewTempWinter','dewTempSummer'].forEach(id => {
     const el = document.getElementById(id);
     const hint = document.getElementById(id + '-hint');
     if (!el.value) {
       el.classList.add('auto-filled');
-      if (hint) { hint.textContent = 'Using NYC average'; hint.classList.add('active'); }
+      if (hint) { hint.textContent = 'Using dataset average'; hint.classList.add('active'); }
     } else {
       el.classList.remove('auto-filled');
       if (hint) { hint.textContent = ''; hint.classList.remove('active'); }
     }
-  }
-}
-['yearbuilt','floors','airTempWinter','airTempSummer','dewTempWinter','dewTempSummer']
-  .forEach(id => {
-    document.getElementById(id).addEventListener('input', applyDefaults);
   });
+}
+['yearbuilt','floors','airTempWinter','airTempSummer','dewTempWinter','dewTempSummer'].forEach(id => {
+  document.getElementById(id).addEventListener('input', applyDefaults);
+});
 applyDefaults();
 
-// =============================================================
-// FETCH + PREDICT
-// =============================================================
 function val(id) {
   const v = document.getElementById(id).value;
   return v === '' ? null : parseFloat(v);
-}
-
-async function runScreening() {
-  const sqft = val('sqft');
-  const type = document.getElementById('buildingType').value;
-
-  document.getElementById('errorBanner').classList.remove('visible');
-
-  if (!sqft || sqft < 100) {
-    showError('Please enter a valid square footage (at least 100 sqft).');
-    return;
-  }
-
-  const btn = document.getElementById('submitBtn');
-  btn.classList.add('loading');
-  btn.disabled = true;
-
-  const payload = {
-    sqft: sqft,
-    primaryspaceusage: type,
-    yearbuilt: val('yearbuilt') ?? NYC_DEFAULTS.yearbuilt,
-    airTemperature_winter: val('airTempWinter') ?? NYC_DEFAULTS.airTempWinter,
-    airTemperature_summer: val('airTempSummer') ?? NYC_DEFAULTS.airTempSummer,
-    dewTemperature_winter: val('dewTempWinter') ?? NYC_DEFAULTS.dewTempWinter,
-    dewTemperature_summer: val('dewTempSummer') ?? NYC_DEFAULTS.dewTempSummer,
-  };
-
-  const hasEnergy = energyMode && (
-    val('elec') !== null || val('gas') !== null ||
-    val('steam') !== null || val('oil') !== null
-  );
-
-  try {
-    let data;
-
-    if (hasEnergy) {
-      // ======= DIRECT CALCULATION PATH =======
-      // User provided energy bills — compute emissions directly,
-      // skip the neural network entirely.
-      data = directCalculate({
-        sqft: sqft,
-        type: type,
-        elec:  val('elec')  ?? 0,
-        gas:   val('gas')   ?? 0,
-        steam: val('steam') ?? 0,
-        oil:   val('oil')   ?? 0,
-      });
-    } else {
-      // ======= NEURAL NETWORK PATH (Model B) =======
-      try {
-        const res = await fetch(API_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        });
-        if (!res.ok) throw new Error('API ' + res.status);
-        data = await res.json();
-      } catch (err) {
-        data = localFallback(payload);
-      }
-    }
-
-    renderResult(data, { ...payload,
-      annual_electricity_kWh: val('elec'),
-      annual_gas_kWh:         val('gas'),
-      annual_steam_kWh:       val('steam'),
-    });
-    document.getElementById('results').classList.add('visible');
-    document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  } catch (err) {
-    showError('Something went wrong: ' + err.message);
-  } finally {
-    btn.classList.remove('loading');
-    btn.disabled = false;
-  }
-}
-
-// Direct emissions calculation using LL97 official coefficients
-// Returns the same shape as the API for unified rendering
-function directCalculate({ sqft, type, elec, gas, steam, oil }) {
-  const cap = LL97_CAPS_2024[type] || 0.00846;
-
-  // Total emissions (tCO2e/year)
-  const emissions = elec * ELEC_FACTOR
-                  + gas  * GAS_FACTOR
-                  + steam * STEAM_FACTOR
-                  + oil  * OIL_FACTOR;
-
-  const ghg = emissions / sqft;
-  const ratio = ghg / cap;
-
-  // LL97-aligned risk classification:
-  //   High   : emissions ABOVE the cap         (ratio > 1.0)
-  //   Medium : within 20% below the cap        (0.8 <= ratio <= 1.0)
-  //   Low    : more than 20% below the cap     (ratio < 0.8)
-  let risk;
-  if (ratio > 1.0)      risk = 'high';
-  else if (ratio >= 0.8) risk = 'medium';
-  else                   risk = 'low';
-
-  const penalty = emissions > cap * sqft
-    ? Math.round((emissions - cap * sqft) * PENALTY_PER_TON)
-    : 0;
-
-  return {
-    risk: risk,
-    model_used: 'Direct calculation',
-    probabilities: { [risk]: 1.0 },
-    ll97_cap: cap,
-    estimated_ghg_intensity: ghg,
-    estimated_annual_emissions: emissions,
-    estimated_annual_penalty_usd: penalty,
-    note: 'Emissions calculated directly from your utility bills using LL97 coefficients.',
-    _direct: true,
-  };
 }
 
 function showError(msg) {
@@ -1290,55 +619,99 @@ function showError(msg) {
   b.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
-// Fallback heuristic when API is offline
-function localFallback(p) {
-  const cap = LL97_CAPS_2024[p.primaryspaceusage] || 0.00846;
-  let ghg;
+function upgradeToEnergy() {
+  if (!energyMode) toggleEnergy();
+  document.getElementById('elec').focus();
+  document.getElementById('elec').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
 
-  if (p.annual_electricity_kWh != null) {
-    ghg = (p.annual_electricity_kWh * ELEC_FACTOR +
-           (p.annual_gas_kWh   || 0) * GAS_FACTOR +
-           (p.annual_steam_kWh || 0) * STEAM_FACTOR) / p.sqft;
-  } else {
-    const baseline = {
-      'Office': 0.00582, 'Education': 0.00603, 'Retail': 0.01256,
-      'Lodging/residential': 0.00739, 'Healthcare': 0.00978,
-      'Entertainment/public assembly': 0.00499, 'Warehouse/storage': 0.00312,
-      'Manufacturing/industrial': 0.01775, 'Public services': 0.00508, 'Other': 0.00803,
-    };
-    const age = 2024 - p.yearbuilt;
-    const ageF = age > 74 ? 1.18 : age > 54 ? 1.09 : age > 34 ? 1.03 : 1.0;
-    const coldF = p.airTemperature_winter < 0 ? 1.08 : p.airTemperature_winter < 5 ? 1.04 : 1.0;
-    ghg = (baseline[p.primaryspaceusage] || 0.006) * ageF * coldF;
+async function runScreening() {
+  const sqft = val('sqft');
+  const type = document.getElementById('buildingType').value;
+  document.getElementById('errorBanner').classList.remove('visible');
+
+  if (!sqft || sqft < 100) {
+    showError('Please enter a valid square footage (at least 100 sqft).');
+    return;
   }
 
-  const ratio = ghg / cap;
-  // Match LL97 exact rules:
-  //   High   : ratio > 1.0  (above cap)
-  //   Medium : 0.8 <= ratio <= 1.0  (within 20% below cap)
-  //   Low    : ratio < 0.8  (more than 20% below cap)
-  const risk = ratio > 1.0 ? 'high' : ratio >= 0.8 ? 'medium' : 'low';
-  const proba = { low: 0, medium: 0, high: 0 };
-  proba[risk] = 0.75;
-  proba[risk === 'high' ? 'medium' : risk === 'low' ? 'medium' : 'low'] = 0.2;
-  proba[risk === 'high' ? 'low' : risk === 'low' ? 'high' : 'high'] = 0.05;
+  const btn = document.getElementById('submitBtn');
+  btn.classList.add('loading'); btn.disabled = true;
 
+  const hasEnergy = energyMode && (
+    val('elec') !== null || val('gas') !== null ||
+    val('steam') !== null || val('oil') !== null
+  );
+
+  const payload = {
+    sqft: sqft,
+    primaryspaceusage: type,
+    yearbuilt: val('yearbuilt'),
+    numberoffloors: val('floors'),
+    airTemperature_winter: val('airTempWinter'),
+    airTemperature_summer: val('airTempSummer'),
+    dewTemperature_winter: val('dewTempWinter'),
+    dewTemperature_summer: val('dewTempSummer'),
+  };
+  if (hasEnergy) {
+    payload.annual_electricity_kWh = val('elec') ?? 0;
+    payload.annual_gas_kWh         = val('gas')  ?? 0;
+    payload.annual_steam_kWh       = val('steam')?? 0;
+    payload.annual_oil_kWh         = val('oil')  ?? 0;
+  }
+
+  try {
+    let data;
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error('API ' + res.status);
+      data = await res.json();
+    } catch (err) {
+      // Fallback: do direct calc locally if energy provided, else show error
+      if (hasEnergy) {
+        data = directCalcLocal(payload);
+      } else {
+        throw new Error('ML API unavailable. Please add energy bills for direct calculation, or try again later.');
+      }
+    }
+
+    renderResult(data, payload, hasEnergy);
+    document.getElementById('results').classList.add('visible');
+    document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } catch (err) {
+    showError(err.message);
+  } finally {
+    btn.classList.remove('loading'); btn.disabled = false;
+  }
+}
+
+// Local backup direct-calc when API is offline
+function directCalcLocal(p) {
+  const cap = LL97_CAPS_2024[p.primaryspaceusage] || 0.00846;
+  const emissions = (p.annual_electricity_kWh ?? 0) * ELEC_FACTOR
+                  + (p.annual_gas_kWh         ?? 0) * GAS_FACTOR
+                  + (p.annual_steam_kWh       ?? 0) * STEAM_FACTOR
+                  + (p.annual_oil_kWh         ?? 0) * OIL_FACTOR;
+  const ghg = emissions / p.sqft;
+  const ratio = ghg / cap;
+  const risk = ratio > 1.0 ? 'high' : ratio >= 0.8 ? 'medium' : 'low';
+  const penalty = ghg > cap ? Math.round((ghg - cap) * p.sqft * PENALTY_PER_TON) : 0;
   return {
-    risk: risk,
-    model_used: 'Model B (fallback)',
-    probabilities: proba,
+    risk, model_used: 'Direct calculation (local)',
+    probabilities: { [risk]: 1.0 },
     ll97_cap: cap,
     estimated_ghg_intensity: ghg,
-    estimated_annual_penalty_usd: ghg > cap ? Math.round((ghg - cap) * p.sqft * PENALTY_PER_TON) : 0,
-    note: 'Estimate from local fallback model — live ML API unavailable.',
-    _fallback: true,
+    estimated_annual_emissions: emissions,
+    estimated_annual_penalty_usd: penalty,
+    note: 'Computed locally from your utility bills.',
   };
 }
 
-// =============================================================
-// RENDER
-// =============================================================
-function renderResult(data, payload) {
+function renderResult(data, payload, hasEnergy) {
   const risk = data.risk;
   const faces = { low: '😎', medium: '😐', high: '😰' };
   const labels = { low: 'Low risk', medium: 'Medium risk', high: 'High risk' };
@@ -1347,218 +720,90 @@ function renderResult(data, payload) {
     medium: 'Borderline exposure.',
     high: 'Action required.',
   };
-  const descs = {
-    low: "Your emissions are more than 20% below the LL97 cap for the 2024–2029 period. You are comfortably compliant today — plan now for the tighter 2030 caps.",
-    medium: "Your emissions are within 20% of the LL97 cap. Minor operational changes could push you over — start evaluating retrofits before the 2030 cycle.",
-    high: "Your emissions exceed the LL97 cap. You are liable for annual penalties at $268 per tCO₂e above the limit, recurring every year until emissions come down.",
+
+  const descs = hasEnergy ? {
+    low: "Your emissions are more than 20% below the LL97 cap. You're comfortably compliant for 2024–2029.",
+    medium: "Your emissions are within 20% of the LL97 cap. Minor changes could push you over — start planning retrofits.",
+    high: `Your emissions exceed the LL97 cap. You face an estimated $${Math.round(data.estimated_annual_penalty_usd).toLocaleString()} annual penalty until emissions come down.`,
+  } : {
+    low: "Based on your building features and climate, our model predicts you're likely below the LL97 cap. To confirm, provide energy bills.",
+    medium: "Our model predicts your emissions are within 20% of the LL97 cap — borderline. Provide energy bills for an exact assessment.",
+    high: "Our model predicts you're likely above the LL97 cap. We strongly recommend pulling utility bills to verify and quantify the penalty.",
   };
 
-  // Hero
-  const hero = document.getElementById('resultHero');
-  hero.className = 'result-hero ' + risk;
+  document.getElementById('resultHero').className = 'result-hero ' + risk;
   document.getElementById('resultFace').textContent = faces[risk];
   document.getElementById('resultLabel').textContent = labels[risk];
   document.getElementById('resultTitle').textContent = titles[risk];
   document.getElementById('resultDesc').textContent = descs[risk];
 
-  // Confidence label
-  let confLabel;
-  if (data.model_used === 'Direct calculation') {
-    confLabel = 'Direct calculation · Highest confidence';
-  } else if (data.model_used && data.model_used.includes('A')) {
-    confLabel = data.model_used + ' · High confidence';
+  const conf = hasEnergy
+    ? 'Direct calculation · Highest confidence'
+    : 'ML classifier · 97% high-risk recall';
+  document.getElementById('confText').textContent = conf;
+
+  // Probability cards (ML only)
+  const probaRow = document.getElementById('probaRow');
+  if (!hasEnergy && data.probabilities) {
+    probaRow.style.display = 'grid';
+    const pL = (data.probabilities.low    ?? 0) * 100;
+    const pM = (data.probabilities.medium ?? 0) * 100;
+    const pH = (data.probabilities.high   ?? 0) * 100;
+    document.getElementById('probaLow').style.width = pL + '%';
+    document.getElementById('probaMed').style.width = pM + '%';
+    document.getElementById('probaHigh').style.width = pH + '%';
+    document.getElementById('probaLowVal').textContent  = pL.toFixed(1) + '%';
+    document.getElementById('probaMedVal').textContent  = pM.toFixed(1) + '%';
+    document.getElementById('probaHighVal').textContent = pH.toFixed(1) + '%';
   } else {
-    confLabel = data.model_used + ' · Screening estimate';
-  }
-  document.getElementById('confText').textContent = confLabel;
-
-  // Metrics
-  const ghg = data.estimated_ghg_intensity ?? 0;
-  const cap = data.ll97_cap;
-  const cap2030 = LL97_CAPS_2030[payload.primaryspaceusage] || cap * 0.55;
-  const totalEmissions = ghg * payload.sqft;
-  const penalty = data.estimated_annual_penalty_usd;
-
-  document.getElementById('mGhg').textContent = ghg ? ghg.toFixed(5) : '—';
-  document.getElementById('mCap').textContent = cap.toFixed(5);
-  document.getElementById('mTotal').textContent = Math.round(totalEmissions).toLocaleString();
-  document.getElementById('mPenalty').textContent = '$' + Math.round(penalty).toLocaleString();
-
-  document.getElementById('mGhg').className = 'metric-val mono ' + (ghg > cap ? 'red' : ghg > cap * 0.8 ? 'amber' : 'green');
-  document.getElementById('mPenalty').className = 'metric-val mono ' + (penalty > 0 ? 'red' : 'green');
-
-  // Timeline
-  renderTimeline(ghg, cap, cap2030, payload.sqft);
-
-  const pen2024 = ghg > cap ? Math.round((ghg - cap) * payload.sqft * PENALTY_PER_TON) : 0;
-  const pen2030 = ghg > cap2030 ? Math.round((ghg - cap2030) * payload.sqft * PENALTY_PER_TON) : 0;
-
-  document.getElementById('cap2024').textContent = 'Cap: ' + cap.toFixed(5);
-  document.getElementById('cap2030').textContent = 'Cap: ' + cap2030.toFixed(5);
-  document.getElementById('pen2024').textContent = pen2024 > 0 ? '$' + pen2024.toLocaleString() + '/yr' : 'Compliant';
-  document.getElementById('pen2030').textContent = pen2030 > 0 ? '$' + pen2030.toLocaleString() + '/yr' : 'Compliant';
-  document.getElementById('pen2024').className = 'period-penalty ' + (pen2024 > 0 ? 'red' : 'green');
-  document.getElementById('pen2030').className = 'period-penalty ' + (pen2030 > 0 ? 'red' : 'green');
-  document.getElementById('period2024').classList.toggle('active', pen2024 > 0);
-  document.getElementById('period2030').classList.toggle('active', pen2030 > 0);
-
-  // Drivers
-  renderDrivers(payload, ghg, cap);
-
-  // Recommendations
-  renderRecommendations(risk, payload);
-}
-
-function renderTimeline(ghg, cap2024, cap2030, sqft) {
-  const ctx = document.getElementById('timelineChart');
-  if (timelineChart) timelineChart.destroy();
-
-  const yourEmissions = ghg * sqft;
-  const cap2024Total = cap2024 * sqft;
-  const cap2030Total = cap2030 * sqft;
-
-  timelineChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: ['2024', '2027', '2030', '2035', '2040', '2045', '2050'],
-      datasets: [
-        {
-          label: 'Your emissions',
-          data: Array(7).fill(yourEmissions),
-          borderColor: '#0A0A0A',
-          backgroundColor: 'rgba(10,10,10,0.05)',
-          borderWidth: 2.5,
-          pointRadius: 4,
-          pointBackgroundColor: '#0A0A0A',
-          tension: 0,
-        },
-        {
-          label: 'LL97 cap',
-          data: [cap2024Total, cap2024Total, cap2030Total, cap2030Total * 0.8, cap2030Total * 0.5, cap2030Total * 0.25, 0],
-          borderColor: '#B0342E',
-          backgroundColor: 'rgba(176,52,46,0.08)',
-          borderWidth: 2,
-          borderDash: [6, 4],
-          pointRadius: 4,
-          pointBackgroundColor: '#B0342E',
-          fill: 'origin',
-          tension: 0.2,
-        },
-      ],
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          position: 'top',
-          align: 'end',
-          labels: { boxWidth: 14, boxHeight: 14, padding: 16, font: { size: 13 } },
-        },
-        tooltip: {
-          callbacks: {
-            label: (ctx) => ctx.dataset.label + ': ' + Math.round(ctx.parsed.y).toLocaleString() + ' tCO₂e',
-          },
-        },
-      },
-      scales: {
-        y: {
-          beginAtZero: true,
-          title: { display: true, text: 'Annual emissions (tCO₂e)', font: { size: 12 } },
-          grid: { color: 'rgba(10,10,10,0.06)' },
-        },
-        x: {
-          grid: { display: false },
-        },
-      },
-    },
-  });
-}
-
-function renderDrivers(payload, ghg, cap) {
-  const age = 2024 - payload.yearbuilt;
-  const drivers = [];
-
-  // Age driver
-  const ageWeight = Math.min(100, (age / 80) * 100);
-  drivers.push({ label: 'Building age (' + age + ' yrs)', pct: Math.round(ageWeight), color: ageWeight > 60 ? '#B0342E' : ageWeight > 30 ? '#B5641C' : '#2F7D3E' });
-
-  // Type driver
-  const typeWeight = (cap < 0.006) ? 80 : 50;
-  drivers.push({ label: 'Building type (' + payload.primaryspaceusage + ')', pct: typeWeight, color: typeWeight > 60 ? '#B0342E' : '#B5641C' });
-
-  // Climate driver
-  const coldWeight = Math.max(0, Math.min(100, (10 - payload.airTemperature_winter) * 10));
-  drivers.push({ label: 'Winter climate (' + payload.airTemperature_winter.toFixed(1) + '°C)', pct: Math.round(coldWeight), color: coldWeight > 50 ? '#B5641C' : '#2F7D3E' });
-
-  // Size driver
-  const sizeWeight = Math.min(100, (payload.sqft / 200000) * 100);
-  drivers.push({ label: 'Floor area (' + payload.sqft.toLocaleString() + ' sqft)', pct: Math.round(sizeWeight), color: '#1E5FA5' });
-
-  if (payload.annual_gas_kWh != null) {
-    const gasRatio = payload.annual_gas_kWh / (payload.annual_electricity_kWh + payload.annual_gas_kWh + payload.annual_steam_kWh);
-    drivers.push({ label: 'Gas dominance (' + Math.round(gasRatio * 100) + '%)', pct: Math.round(gasRatio * 100), color: gasRatio > 0.5 ? '#B0342E' : '#B5641C' });
+    probaRow.style.display = 'none';
   }
 
-  drivers.sort((a, b) => b.pct - a.pct);
+  // Metric cards (direct calc only)
+  const metricsBlock = document.getElementById('metricsBlock');
+  if (hasEnergy) {
+    metricsBlock.style.display = 'grid';
+    const ghg = data.estimated_ghg_intensity;
+    const cap = data.ll97_cap;
+    const total = data.estimated_annual_emissions;
+    const penalty = data.estimated_annual_penalty_usd;
+    document.getElementById('mGhg').textContent = ghg.toFixed(5);
+    document.getElementById('mCap').textContent = cap.toFixed(5);
+    document.getElementById('mTotal').textContent = Math.round(total).toLocaleString();
+    document.getElementById('mPenalty').textContent = '$' + Math.round(penalty).toLocaleString();
+    document.getElementById('mGhg').className = 'metric-val mono ' + (ghg > cap ? 'red' : ghg > cap * 0.8 ? 'amber' : 'green');
+    document.getElementById('mPenalty').className = 'metric-val mono ' + (penalty > 0 ? 'red' : 'green');
+  } else {
+    metricsBlock.style.display = 'none';
+  }
 
-  const container = document.getElementById('driversContainer');
-  container.innerHTML = drivers.map(d => `
-    <div class="driver">
-      <div class="driver-label">${d.label}</div>
-      <div class="driver-bar-wrap">
-        <div class="driver-bar" style="width: ${d.pct}%; background: ${d.color};"></div>
-      </div>
-      <div class="driver-pct mono">${d.pct}%</div>
-    </div>
-  `).join('');
+  // Upgrade CTA (ML only)
+  document.getElementById('upgradeCta').style.display = hasEnergy ? 'none' : 'flex';
+
+  renderRecommendations(risk, payload, hasEnergy);
 }
 
-function renderRecommendations(risk, payload) {
-  const age = 2024 - payload.yearbuilt;
+function renderRecommendations(risk, payload, hasEnergy) {
+  const age = payload.yearbuilt ? (2024 - payload.yearbuilt) : 50;
   const recs = [];
 
   if (age > 40) {
-    recs.push({
-      icon: '🏗️',
-      title: 'Envelope upgrade',
-      desc: 'Window replacement, insulation, air sealing. Reduces heating/cooling load by 20–40%.',
-      impact: '~25% emission reduction',
-    });
+    recs.push({ icon: '🏗️', title: 'Envelope upgrade', desc: 'Window replacement, insulation, air sealing. Reduces heating/cooling load by 20–40%.', impact: '~25% emission reduction' });
   }
-  if (payload.annual_gas_kWh && payload.annual_gas_kWh > 0) {
-    recs.push({
-      icon: '⚡',
-      title: 'Electrify heating',
-      desc: 'Replace gas boilers with air-source or ground-source heat pumps. NYC grid is decarbonizing.',
-      impact: '~40% emission reduction',
-    });
+  if (hasEnergy && payload.annual_gas_kWh > 0) {
+    recs.push({ icon: '⚡', title: 'Electrify heating', desc: 'Replace gas boilers with heat pumps. NYC grid is decarbonizing — gas reliance gets more costly.', impact: '~40% emission reduction' });
+  } else if (!hasEnergy) {
+    recs.push({ icon: '⚡', title: 'Consider heat pumps', desc: 'If your building uses gas heat, electrification is the highest-impact retrofit for LL97.', impact: '~40% emission reduction' });
   }
-  recs.push({
-    icon: '🔍',
-    title: 'Submeter and benchmark',
-    desc: 'Install sub-metering to identify high-consumption zones. Required for Energy Star compliance anyway.',
-    impact: '5–15% via behavior change',
-  });
+  recs.push({ icon: '🔍', title: 'Submeter and benchmark', desc: 'Install sub-metering to identify high-consumption zones. Required for compliance reporting.', impact: '5–15% via behavior change' });
   if (risk === 'high') {
-    recs.push({
-      icon: '💸',
-      title: 'GHG offset credits',
-      desc: 'Short-term bridge for compliance years. Not a substitute for physical retrofits.',
-      impact: 'Caps penalty at credit price',
-    });
+    recs.push({ icon: '💸', title: 'GHG offset credits', desc: 'Short-term bridge for compliance years. Cap penalty exposure while planning retrofits.', impact: 'Caps penalty at credit price' });
   }
-  recs.push({
-    icon: '☀️',
-    title: 'Rooftop solar',
-    desc: 'On-site generation directly offsets grid electricity. Eligible for NYC property tax abatement.',
-    impact: '~10% emission reduction',
-  });
+  recs.push({ icon: '☀️', title: 'Rooftop solar', desc: 'On-site generation directly offsets grid electricity. Eligible for NYC property tax abatement.', impact: '~10% emission reduction' });
 
-  const container = document.getElementById('recsContainer');
-  container.innerHTML = recs.map(r => `
+  document.getElementById('recsContainer').innerHTML = recs.map(r => `
     <div class="rec-card">
-      <div class="rec-icon" style="font-size: 20px;">${r.icon}</div>
+      <div class="rec-icon">${r.icon}</div>
       <div class="rec-title">${r.title}</div>
       <div class="rec-desc">${r.desc}</div>
       <div class="rec-impact">${r.impact}</div>
@@ -1567,7 +812,7 @@ function renderRecommendations(risk, payload) {
 }
 
 function resetForm() {
-  ['sqft','yearbuilt','floors','airTempWinter','airTempSummer','dewTempWinter','dewTempSummer','elec','gas','steam','energyStar']
+  ['sqft','yearbuilt','floors','airTempWinter','airTempSummer','dewTempWinter','dewTempSummer','elec','gas','steam','oil']
     .forEach(id => {
       const el = document.getElementById(id);
       if (el) { el.value = ''; el.classList.remove('auto-filled'); }
