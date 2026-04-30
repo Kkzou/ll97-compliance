@@ -410,11 +410,6 @@ section { padding: 64px 0; }
             <input class="field-input" type="number" id="occupants" placeholder="e.g. 250" min="0" />
             <div class="field-hint" id="occupants-hint"></div>
           </div>
-          <div class="field">
-            <label class="field-label">Energy Star score <span class="field-opt">1–100</span></label>
-            <input class="field-input" type="number" id="energyStar" placeholder="e.g. 65" min="1" max="100" />
-            <div class="field-hint" id="energyStar-hint"></div>
-          </div>
         </div>
       </div>
 
@@ -556,7 +551,7 @@ section { padding: 64px 0; }
 const API_URL = 'https://ll97-api.onrender.com/predict';
 
 const NYC_DEFAULTS = {
-  yearbuilt: 1967, floors: 4, occupants: 250, energyStar: 50,
+  yearbuilt: 1967, floors: 4, occupants: 250,
   airTempWinter: 6.5, airTempSummer: 24.1,
   dewTempWinter: 0.3, dewTempSummer: 16.2,
 };
@@ -582,7 +577,7 @@ function toggleEnergy() {
 }
 
 function applyDefaults() {
-  ['yearbuilt','floors','occupants','energyStar','airTempWinter','airTempSummer','dewTempWinter','dewTempSummer'].forEach(id => {
+  ['yearbuilt','floors','occupants','airTempWinter','airTempSummer','dewTempWinter','dewTempSummer'].forEach(id => {
     const el = document.getElementById(id);
     const hint = document.getElementById(id + '-hint');
     if (el && !el.value) {
@@ -594,7 +589,7 @@ function applyDefaults() {
     }
   });
 }
-['yearbuilt','floors','occupants','energyStar','airTempWinter','airTempSummer','dewTempWinter','dewTempSummer'].forEach(id => {
+['yearbuilt','floors','occupants','airTempWinter','airTempSummer','dewTempWinter','dewTempSummer'].forEach(id => {
   const el = document.getElementById(id);
   if (el) el.addEventListener('input', applyDefaults);
 });
@@ -642,7 +637,6 @@ async function runScreening() {
     yearbuilt: val('yearbuilt'),
     numberoffloors: val('floors'),
     occupants: val('occupants'),
-    energystarscore: val('energyStar'),
     airTemperature_winter: val('airTempWinter'),
     airTemperature_summer: val('airTempSummer'),
     dewTemperature_winter: val('dewTempWinter'),
@@ -798,7 +792,7 @@ function renderRecommendations(risk, payload, hasEnergy) {
 }
 
 function resetForm() {
-  ['sqft','yearbuilt','floors','occupants','energyStar','airTempWinter','airTempSummer','dewTempWinter','dewTempSummer','elec','gas','steam','oil']
+  ['sqft','yearbuilt','floors','occupants','airTempWinter','airTempSummer','dewTempWinter','dewTempSummer','elec','gas','steam','oil']
     .forEach(id => {
       const el = document.getElementById(id);
       if (el) { el.value = ''; el.classList.remove('auto-filled'); }
